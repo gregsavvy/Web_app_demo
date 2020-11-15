@@ -20,6 +20,13 @@ connection.once('open', function() {
   console.log("MongoDB Atlas connection established");
 });
 
+// routes
+const usersRouter = require('./routes/users');
+const goodsRouter = require('./routes/goods');
+
+app.use('/users', usersRouter);
+app.use('/goods', goodsRouter);
+
 // server start
 app.listen(port, function() {
   console.log('Server is running on port: '+port);
