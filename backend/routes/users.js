@@ -27,14 +27,14 @@ router.route('/add').post((req, res) => {
 
 router.route('/:id').get((req, res) => {
   Users.findById(req.params.id)
-    .then(users => goods.json(users))
-    .catch(err => res.status(400).json('Error: '+err'));
+    .then(users => res.json(users))
+    .catch(err => res.status(400).json('Error: '+err));
 });
 
 router.route('/:id').delete((req, res) => {
   Users.findByIdAndDelete(req.params.id)
-    .then(() => goods.json('Users deleted!'))
-    .catch(err => res.status(400).json('Error: '+err'));
+    .then(() => res.json('Users deleted!'))
+    .catch(err => res.status(400).json('Error: '+err));
 });
 
 router.route('/update/:id').post((req, res) => {
@@ -47,9 +47,9 @@ router.route('/update/:id').post((req, res) => {
 
       users.save()
         .then(() => res.json('Users updated!'))
-        .catch(err => res.status(400).json('Error: '+err'));
+        .catch(err => res.status(400).json('Error: '+err));
     })
-    .catch(err => res.status(400).json('Error: '+err'));
+    .catch(err => res.status(400).json('Error: '+err));
 });
 
 

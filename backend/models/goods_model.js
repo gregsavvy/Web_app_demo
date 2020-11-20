@@ -3,13 +3,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const goodsSchema = new Schema({
-  serverid: {
-    type: Int,
-    required: true,
-    unique: true,
-    trim: true,
-    minlength: 1
-  },
   param1: {
     type: String,
     required: true,

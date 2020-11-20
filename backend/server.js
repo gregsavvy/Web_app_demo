@@ -16,8 +16,8 @@ app.use(express.json());
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, {useNewUrlParser: true, useCreateIndex: true});
 const connection = mongoose.connection;
-connection.once('open', function() {
-  console.log("MongoDB Atlas connection established");
+connection.once('open', () => {
+  console.log('MongoDB Atlas connection established');
 });
 
 // routes
@@ -28,10 +28,6 @@ app.use('/users', usersRouter);
 app.use('/goods', goodsRouter);
 
 // server start
-app.listen(port, function() {
+app.listen(port, () => {
   console.log('Server is running on port: '+port);
-});
-
-app.get('/', function(req, res) {
-  console.log('Hello World!')
 });
