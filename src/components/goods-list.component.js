@@ -1,14 +1,30 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Card from '../../node_modules/react-bootstrap/Card';
+import CardDeck from '../../node_modules/react-bootstrap/CardDeck';
+import Button from '../../node_modules/react-bootstrap/Button';
+
+const context = require.context('../img/', true);
+
+const images = {};
+context.keys().forEach((key) => {
+  const imgpath = key.split('./').pop() // remove the first 2 characters
+    //.slice(0, -4); // remove the file extension
+  images[imgpath] = context(key);
+});
 
 const Good = props => (
-  <tr>
-    <td>{props.good.param1}</td>
-    <td>{props.good.param2}</td>
-    <td>{props.good.imgpath}</td>
-    <td>{props.good.date.substring(0,10)}</td>
-  </tr>
+    <Card style={{ width: '18rem' }}>
+    <Card.Img variant="top" style={{height:150, width:150}} src={images[props.good.imgpath].default} />
+    <Card.Body>
+      <Card.Title>{props.good.param1}</Card.Title>
+      <Card.Text>
+          {props.good.param2}
+      </Card.Text>
+      <Button variant="primary">Go somewhere</Button>
+    </Card.Body>
+    </Card>
 )
 
 export default class GoodsList extends Component {
@@ -38,19 +54,9 @@ export default class GoodsList extends Component {
     return (
       <div>
         <h3>Goods List</h3>
-        <table className="table">
-          <thead className="thead-light">
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Image</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            { this.goodListTable() }
-          </tbody>
-        </table>
+        <CardDeck>
+        { this.goodListTable() }
+        </CardDeck>
       </div>
     )
   }
