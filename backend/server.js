@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+
 require('dotenv').config();
 
 // use modules
@@ -26,6 +27,8 @@ const goodsRouter = require('./routes/goods');
 
 app.use('/users', usersRouter);
 app.use('/goods', goodsRouter);
+
+
 
 // server start
 app.listen(port, () => {

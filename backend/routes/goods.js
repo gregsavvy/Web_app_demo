@@ -1,22 +1,37 @@
 const router = require('express').Router();
 let Goods = require('../models/goods_model');
+const multer = require('multer');
+const path = require('path')
 
+// file upload storage
+const storageConfig = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, path.resolve('../', 'src/img/'));
+  },
+  filename: (req,file,callback) => {
+    callback(null, file.originalname);
+  }
+})
+
+const upload = multer({storage:storageConfig});
+
+// routes
 router.route('/').get((req, res) => {
   Goods.find()
     .then(goods => res.json(goods))
     .catch(err => res.status(400).json('Error: '+err));
 });
 
-router.route('/add').post((req, res) => {
+router.route('/add').post(upload.single('img'), (req, res, next) => {
   const param1 = req.body.param1;
   const param2 = req.body.param2;
-  const imgpath = req.body.imgpath;
+  const img = req.file.originalname;
   const date = Date.parse(req.body.date);
 
   const newGoods = new Goods({
     param1,
     param2,
-    imgpath,
+    img,
     date
   });
 
@@ -37,12 +52,12 @@ router.route('/:id').delete((req, res) => {
     .catch(err => res.status(400).json('Error: '+err));
 });
 
-router.route('/update/:id').post((req, res) => {
+router.route('/update/:id').post(upload.single('img'), (req, res, next) => {
   Goods.findById(req.params.id)
     .then(goods => {
       goods.param1 = req.body.param1;
       goods.param2 = req.body.param2;
-      goods.imgpath = req.body.imgpath;
+      goods.img = req.file.originalname;
       goods.date = Date.parse(req.body.date);
 
       goods.save()

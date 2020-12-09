@@ -6,7 +6,7 @@ const Good = props => (
   <tr>
     <td>{props.good.param1}</td>
     <td>{props.good.param2}</td>
-    <td>{props.good.imgpath}</td>
+    <td>{props.good.img}</td>
     <td>{props.good.date.substring(0,10)}</td>
     <td>
       <Link to={"/edit/"+props.good._id}>edit</Link> | <a href="#" onClick={() => { props.deleteGood(props.good._id) }}>delete</a>

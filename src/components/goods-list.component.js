@@ -9,14 +9,13 @@ const context = require.context('../img/', true);
 
 const images = {};
 context.keys().forEach((key) => {
-  const imgpath = key.split('./').pop() // remove the first 2 characters
-    //.slice(0, -4); // remove the file extension
-  images[imgpath] = context(key);
+  const img = key.split('./').pop() // remove the first 2 characters
+  images[img] = context(key);
 });
 
 const Good = props => (
     <Card style={{ width: '18rem' }}>
-    <Card.Img variant="top" style={{height:150, width:150}} src={images[props.good.imgpath].default} />
+    <Card.Img variant="top" style={{height:150, width:150}} src={images[props.good.img].default} alt="..." />
     <Card.Body>
       <Card.Title>{props.good.param1}</Card.Title>
       <Card.Text>

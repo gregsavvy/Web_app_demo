@@ -7,14 +7,14 @@ export default class CreateGood extends Component {
 
     this.onChangeParam1 = this.onChangeParam1.bind(this);
     this.onChangeParam2 = this.onChangeParam2.bind(this);
-    this.onChangeImgPath = this.onChangeImgPath.bind(this);
+    this.onChangeImg = this.onChangeImg.bind(this);
     this.onChangeDate = this.onChangeDate.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
       param1: '',
       param2: '',
-      imgpath: '',
+      img: '',
       date: ''
     }
   }
@@ -31,9 +31,9 @@ export default class CreateGood extends Component {
     })
   }
 
-  onChangeImgPath(e) {
+  onChangeImg(e) {
     this.setState({
-      imgpath: e.target.value
+      img: e.target.files[0]
     })
   }
 
@@ -46,17 +46,22 @@ export default class CreateGood extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    const good = {
-      param1: this.state.param1,
-      param2: this.state.param2,
-      imgpath: this.state.imgpath,
-      date: this.state.date
-    }
+    let formData = new FormData();
+    formData.append('param1', this.state.param1);
+    formData.append('param2', this.state.param2);
+    formData.append('img', this.state.img);
+    formData.append('date', this.state.date);
 
-    console.log(good);
-
-    axios.post('http://localhost:5000/goods/add', good)
-      .then(res => console.log(res.data));
+    axios.post('http://localhost:5000/goods/add', formData, {
+      headers: {
+        "Authorization": "token",
+        "Content-type": "multipart/form-data",
+      },
+    })
+      .then(res => console.log(res.data))
+      .catch(err => {
+        console.log(err);
+      })
 
     window.location = '/admin';
   }
@@ -65,7 +70,7 @@ export default class CreateGood extends Component {
     return (
     <div>
       <h3>Create New Good</h3>
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} encType="multipart/form-data">
         <div className="form-group">
           <label>Name: </label>
           <input  type="text"
@@ -85,12 +90,12 @@ export default class CreateGood extends Component {
               />
         </div>
         <div className="form-group">
-          <label>Image: </label>
+          <label htmlFor="file">Image: </label>
           <input
-              type="text"
-              className="form-control"
-              value={this.state.imgpath}
-              onChange={this.onChangeImgPath}
+              type="file"
+              filename="img"
+              className="form-control-file"
+              onChange={this.onChangeImg}
               />
         </div>
         <div className="form-group">
