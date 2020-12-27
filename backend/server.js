@@ -1,36 +1,42 @@
 // require modules
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
+const http = require('http')
+const mongoose = require('mongoose')
+const path = require('path')
+const { getProducts, getProduct, createProduct, updateProduct, deleteProduct } = require('./controllers/goods')
 
-
-require('dotenv').config();
-
-// use modules
-const app = express();
-const port = process.env.port || 5000;
-
-app.use(cors());
-app.use(express.json());
+require('dotenv').config()
 
 // database connection
-const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, {useNewUrlParser: true, useCreateIndex: true});
-const connection = mongoose.connection;
+const uri = process.env.ATLAS_URI
+mongoose.connect(uri, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
+const connection = mongoose.connection
 connection.once('open', () => {
-  console.log('MongoDB Atlas connection established');
+  console.log('MongoDB Atlas connection established')
 });
 
-// routes
-const usersRouter = require('./routes/users');
-const goodsRouter = require('./routes/goods');
+// server routes
+const server = http.createServer((req, res) => {
+    if(req.url === '/api/products' && req.method === 'GET') {
+        getProducts(req, res)
+    } else if(req.url.match(/\/api\/products\/\w+/) && req.method === 'GET') {
+        const id = req.url.split('/')[3]
+        getProduct(req, res, id)
+    } else if(req.url === '/api/products' && req.method === 'POST') {
+        createProduct(req, res)
+    } else if(req.url.match(/\/api\/products\/\w+/) && req.method === 'PUT') {
+        const id = req.url.split('/')[3]
+        updateProduct(req, res, id)
+    } else if(req.url.match(/\/api\/products\/\w+/) && req.method === 'DELETE') {
+        const id = req.url.split('/')[3]
+        deleteProduct(req, res, id)
+    } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ message: 'Route Not Found' }))
+    }
+})
 
-app.use('/users', usersRouter);
-app.use('/goods', goodsRouter);
+// port
+const port = process.env.port || 5000
 
-
-
-// server start
-app.listen(port, () => {
-  console.log('Server is running on port: '+port);
-});
+// start
+server.listen(port, () => console.log (`Server running on port ${port}`))
