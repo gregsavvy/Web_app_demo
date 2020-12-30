@@ -1,11 +1,17 @@
+const fs = require('fs')
+const os = require('os')
+const path = require('path')
+
+var Busboy = require('busboy')
+
 let Goods = require('../models/goods_model')
-const multer = require('multer')
 
 // forming JSON body - utility function for create and update API
   function readyJSON(req) {
       return new Promise((resolve, reject) => {
           try {
               let body = ''
+              // var form = new formidable.IncomingForm()
 
               req.on('data', (chunk) => {
                   body += chunk.toString()
@@ -14,24 +20,12 @@ const multer = require('multer')
               req.on('end', () => {
                   resolve(body)
               })
-          } catch (error) {
+          } catch (err) {
               reject(err)
           }
       })
   }
-//
-
-// file upload storage
-const storageConfig = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(null, path('./src/img/'))
-  },
-  filename: (req,file,callback) => {
-    callback(null, file.originalname)
-  }
-})
-
-const upload = multer({storage:storageConfig});
+// end utility
 
 // CRUD CONTROLLERS
 
@@ -52,42 +46,67 @@ async function getProduct(req,res,id) {
 // 3 Creates a product
 async function createProduct(req,res) {
 
-  upload.single('img')
+    var busboy = new Busboy({ headers: req.headers })
+    let body = {}
+       busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+         var saveTo = path.resolve('../', './backend/src/img/', path.basename(filename))
+         file.pipe(fs.createWriteStream(saveTo))
+         body['filename'] = filename
+       })
+       busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
+         body[fieldname] = val
 
-  const body = await readyJSON(req)
-  const { param1, param2, img, date } = JSON.parse(body)
+       })
+       busboy.on('finish', function() {
+         const { param1, param2, filename, date } = JSON.parse(JSON.stringify(body))
+         const newGoods = new Goods({
+           param1,
+           param2,
+           filename,
+           date
+         })
 
-  const newGoods = new Goods({
-    param1,
-    param2,
-    img,
-    date
-  })
-
-  newGoods.save()
-    .then(() => res.end(JSON.stringify('Goods Added!')))
-    .catch(err => res.end(JSON.stringify(err)))
- }
+         newGoods.save()
+           .then(() => res.end('Done!'))
+           .catch(err => res.end(JSON.stringify(err)))
+        })
+      return req.pipe(busboy)
+  }
 
 // 4 Updates a product
 async function updateProduct(req, res, id) {
-  upload.single('img')
 
-  const body = await readyJSON(req)
-  const { param1, param2, img, date } = JSON.parse(body)
+  var busboy = new Busboy({ headers: req.headers })
+  let body = {}
+     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+       var saveTo = path.resolve('../', './backend/src/img/', path.basename(filename))
+       file.pipe(fs.createWriteStream(saveTo))
+       body['filename'] = filename
+     })
+     busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
+       body[fieldname] = val
+     })
+     busboy.on('finish', function() {
+       const { param1, param2, filename, date } = JSON.parse(JSON.stringify(body))
 
-  Goods.findById(id)
-    .then(goods => {
-      goods.param1 = param1 || goods.param1
-      goods.param2 = param2 || goods.param2
-      goods.img = img || goods.img
-      goods.date = date || goods.date
+       Goods.findById(id)
+         .then(goods => {
+           goods.param1 = param1 || goods.param1
+           goods.param2 = param2 || goods.param2
+           goods.filename = filename || goods.filename
+           goods.date = date || goods.date
 
-      goods.save()
-        .then(() => res.end(JSON.stringify('Goods updated!')))
-        .catch(err => res.end(JSON.stringify(err)))
-    })
-    .catch(err => JSON.stringify(err))
+           goods.save()
+             .then(() => res.end(JSON.stringify('Goods updated!')))
+             .catch(err => res.end(JSON.stringify(err)))
+         })
+         .catch(err => JSON.stringify(err))
+
+       newGoods.save()
+         .then(() => res.end('Done!'))
+         .catch(err => res.end(JSON.stringify(err)))
+      })
+    return req.pipe(busboy)
 }
 
 // 5 Deletes a product

@@ -17,7 +17,7 @@ const goodsSchema = new Schema({
     trim: false,
     minlength: 3
   },
-  img: {
+  filename: {
     data: Buffer,
     type: String,
   },
