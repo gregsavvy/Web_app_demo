@@ -1,18 +1,25 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
 const goodsSchema = new Schema({
   param1: {
     type: String,
     required: true,
     unique: false,
-    trim: false,
+    trim: true,
     minlength: 3
   },
   param2: {
     type: String,
     required: false,
+    unique: false,
+    trim: true,
+    minlength: 5
+  },
+  param3: {
+    type: Boolean,
+    required: true,
     unique: false,
     trim: false,
     minlength: 3
@@ -26,8 +33,10 @@ const goodsSchema = new Schema({
     required: true,
   },
 }, {timestamps: true,
-});
+})
 
-const Goods = mongoose.model('Goods', goodsSchema);
+goodsSchema.index({param1: 'text'}, {param3: Boolean})
 
-module.exports = Goods;
+const Goods = mongoose.model('Goods', goodsSchema)
+
+module.exports = Goods

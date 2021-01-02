@@ -6,7 +6,7 @@ var Busboy = require('busboy')
 
 let Goods = require('../models/goods_model')
 
-// forming JSON body - utility function for create and update API
+// forming JSON body - utility function for JSON parsing
   function readyJSON(req) {
       return new Promise((resolve, reject) => {
           try {
@@ -27,7 +27,7 @@ let Goods = require('../models/goods_model')
   }
 // end utility
 
-// CRUD CONTROLLERS
+// STANDARD CRUD CONTROLLERS
 
 // 1 Gets all products
 async function getProducts(req,res) {
@@ -45,7 +45,7 @@ async function getProduct(req,res,id) {
 
 // 3 Creates a product
 async function createProduct(req,res) {
-
+    // busboy form parsing
     var busboy = new Busboy({ headers: req.headers })
     let body = {}
        busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
@@ -55,13 +55,13 @@ async function createProduct(req,res) {
        })
        busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
          body[fieldname] = val
-
        })
        busboy.on('finish', function() {
          const { param1, param2, filename, date } = JSON.parse(JSON.stringify(body))
          const newGoods = new Goods({
            param1,
            param2,
+           param3,
            filename,
            date
          })
@@ -75,7 +75,7 @@ async function createProduct(req,res) {
 
 // 4 Updates a product
 async function updateProduct(req, res, id) {
-
+  // busboy form parsing
   var busboy = new Busboy({ headers: req.headers })
   let body = {}
      busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
@@ -93,6 +93,7 @@ async function updateProduct(req, res, id) {
          .then(goods => {
            goods.param1 = param1 || goods.param1
            goods.param2 = param2 || goods.param2
+           goods.param3 = param2 || goods.param3
            goods.filename = filename || goods.filename
            goods.date = date || goods.date
 
@@ -116,10 +117,32 @@ async function deleteProduct(req,res, id) {
     .catch(err => res.end(JSON.stringify(err)))
 }
 
+// ADDITIONAL SEARCH AND FILTER CONTROLLERS
+
+// Searches for products and filters based on a parameter
+async function searchProduct(req,res, searchparam, is_goodparam) {
+  if (is_goodparam == 'true') {
+    Goods.find({$and: [{$text: {$search: searchparam }}, {param3: true}]})
+      .then(goods => res.end(JSON.stringify(goods)))
+      .catch(err => res.end(JSON.stringify(err)))
+  }
+  else if (is_goodparam == 'false') {
+    Goods.find({$and: [{$text: {$search: searchparam }}, {param3: false}]})
+      .then(goods => res.end(JSON.stringify(goods)))
+      .catch(err => res.end(JSON.stringify(err)))
+  }
+  else {
+    Goods.find({$text: {$search: searchparam }})
+      .then(goods => res.end(JSON.stringify(goods)))
+      .catch(err => res.end(JSON.stringify(err)))
+  }
+    }
+
 module.exports = {
   getProducts,
   getProduct,
   createProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  searchProduct
 }
