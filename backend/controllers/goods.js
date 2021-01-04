@@ -138,11 +138,21 @@ async function searchProduct(req,res, searchparam, is_goodparam) {
   }
     }
 
+// Gets 20 latest products
+async function getProducts20(req,res) {
+    Goods.find({published: true})
+      .sort({'date': -1})
+      .limit(20)
+      .then(goods => res.end(JSON.stringify(goods)))
+      .catch(err => res.end(JSON.stringify(err)))
+    }
+
 module.exports = {
   getProducts,
   getProduct,
   createProduct,
   updateProduct,
   deleteProduct,
-  searchProduct
+  searchProduct,
+  getProducts20
 }
