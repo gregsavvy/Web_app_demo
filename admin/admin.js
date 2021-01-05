@@ -1,5 +1,5 @@
 // Product class: product object
-class Product {
+class Good {
   constructor(title, desc, active_toggle, filename, date) {
     this.title = title
     this.desc = desc
@@ -11,8 +11,30 @@ class Product {
 
 // UI class: UI tasks
 class UI {
-  static async displayGoods (url) {
-    const StoredGoods = fetch(url)
+  //top 20 for the home page
+  static async displayGoods_home() {
+    const response = await fetch('http://localhost:5000/api/products_search/limit=20')
+    const StoredGoods = await response.json()
+    StoredGoods.forEach((good) => UI.addGoodToList_home(good))
+  }
+
+  static async addGoodToList_home(good) {
+    const list = document.querySelector('#goods-list-home')
+    const row = document.createElement('tr')
+    row.innerHTML = `
+    <td>${good.title}</td>
+    <td>${good.desc}</td>
+    <td>${good.active_toggle}</td>
+    <td>${good.filename}</td>
+    <td>${good.date}</td>
+    `
+    list.appendChild(row)
+  }
+
+  //full list
+  static async displayGoods() {
+    const response = await fetch('http://localhost:5000/api/products')
+    const StoredGoods = await response.json()
     StoredGoods.forEach((good) => UI.addGoodToList(good))
   }
 
@@ -27,109 +49,107 @@ class UI {
     <td>${good.date}</td>
     <td><a href="#" class="btn btn-danger btn-sm delete">X</a></td>
     `
-
     list.appendChild(row)
   }
 
-  static async deleteBook(el) {
+  static async deleteGood(el) {
     if(el.classList.contains('delete')) {
-      el.parentElement.parentElement.remove();
+      el.parentElement.parentElement.remove()
     }
   }
 
   static async showAlert(message, className) {
-    const div = document.createElement('div');
-    div.className = `alert alert-${className}`;
-    div.appendChild(document.createTextNode(message));
-    const container = document.querySelector('.container');
-    const form = document.querySelector('#book-form');
-    container.insertBefore(div, form);
+    const div = document.createElement('div')
+    div.className = `alert alert-${className}`
+    div.appendChild(document.createTextNode(message))
+    const container = document.querySelector('.container')
+    const form = document.querySelector('#product-form')
+    container.insertBefore(div, form)
 
     // Vanish in 3 seconds
-    setTimeout(() => document.querySelector('.alert').remove(), 3000);
+    setTimeout(() => document.querySelector('.alert').remove(), 3000)
   }
 
   static async clearFields() {
-    document.querySelector('#title').value = '';
-    document.querySelector('#author').value = '';
-    document.querySelector('#isbn').value = '';
+    document.querySelector('#name').value = ''
+    document.querySelector('#description').value = ''
+    document.querySelector('#active').value = ''
+    document.querySelector('#attachment').value = ''
   }
 }
 
-// Store Class: Handles Storage
-class Store {
-  static getBooks() {
-    let books;
-    if(localStorage.getItem('books') === null) {
-      books = [];
-    } else {
-      books = JSON.parse(localStorage.getItem('books'));
-    }
+// Events: Display Books
+var eventSource_home = new EventSource('http://localhost:5000/api/products_search/limit=20')
 
-    return books;
-  }
-
-  static addBook(book) {
-    const books = Store.getBooks();
-    books.push(book);
-    localStorage.setItem('books', JSON.stringify(books));
-  }
-
-  static removeBook(isbn) {
-    const books = Store.getBooks();
-
-    books.forEach((book, index) => {
-      if(book.isbn === isbn) {
-        books.splice(index, 1);
-      }
-    });
-
-    localStorage.setItem('books', JSON.stringify(books));
-  }
+eventSource_home.onopen = function(e) {
+  UI.displayGoods_home
 }
 
-// Event: Display Books
-document.addEventListener('DOMContentLoaded', UI.displayBooks);
+var eventSource_list = new EventSource('http://localhost:5000/api/products')
 
-// Event: Add a Book
-document.querySelector('#book-form').addEventListener('submit', (e) => {
+eventSource_list.onopen = function(e) {
+  UI.displayGoods
+}
+
+// Event: Add a product
+document.querySelector('#product-form').addEventListener('submit', (e) => {
   // Prevent actual submit
-  e.preventDefault();
+  e.preventDefault()
 
   // Get form values
-  const title = document.querySelector('#title').value;
-  const author = document.querySelector('#author').value;
-  const isbn = document.querySelector('#isbn').value;
+  const name = document.querySelector('#name').value
+  const description = document.querySelector('#description').value
+  const active = document.querySelector('#active').value
+  const attachment = document.querySelector('#attachment').value
+
+  const date = Date.now()
 
   // Validate
-  if(title === '' || author === '' || isbn === '') {
+  if(name === '' || description === '' || active === '' || attachment === '') {
     UI.showAlert('Please fill in all fields', 'danger');
   } else {
-    // Instatiate book
-    const book = new Book(title, author, isbn);
+    // Instatiate product
+    const good = new Good(name, description, active, attachment, date)
 
-    // Add Book to UI
-    UI.addBookToList(book);
+    // Add book to API
+    const formData = new FormData(good);
+    const fileField = document.querySelector('input[type="file"]')
+    formData.append(fileField.files[0])
 
-    // Add book to store
-    Store.addBook(book);
+    try {
+      const response = await fetch('http://localhost:5000/api/products', {
+        method: 'POST',
+        headers: {'Content-Type': 'multipart/form-data'},
+        body: formData
+      })
+      const result = await response.json()
+      console.log('Успех:', JSON.stringify(result))
+    } catch (error) {
+      console.error('Ошибка:', error)
+    }
 
     // Show success message
-    UI.showAlert('Book Added', 'success');
+    UI.showAlert('Product added', 'success')
 
     // Clear fields
-    UI.clearFields();
+    UI.clearFields()
   }
-});
+})
 
 // Event: Remove a Book
-document.querySelector('#book-list').addEventListener('click', (e) => {
+document.querySelector('#goods-list').addEventListener('click', (e) => {
   // Remove book from UI
-  UI.deleteBook(e.target);
+  UI.deleteGood(e.target)
 
-  // Remove book from store
-  Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
-
+  // Remove book from API !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  const response = await fetch(`http://localhost:5000/api/products/${e.target.id}`, {
+      method: 'DELETE'
+    })
+    const result = await response.json()
+    console.log('Успех:', JSON.stringify(result))
+  } catch (error) {
+    console.error('Ошибка:', error)
+  }
   // Show success message
-  UI.showAlert('Book Removed', 'success');
-});
+  UI.showAlert('Product Removed', 'success')
+})
