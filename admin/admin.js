@@ -1,6 +1,7 @@
 // Product class: product object
 class Good {
-  constructor(title, desc, active_toggle, filename, date) {
+  constructor(id, title, desc, active_toggle, filename, date) {
+    this.id = id
     this.title = title
     this.desc = desc
     this.active_toggle = active_toggle
@@ -21,10 +22,16 @@ class UI {
   static async addGoodToList_home(good) {
     const list = document.querySelector('#goods-list-home')
     const row = document.createElement('tr')
+    if (good.param3=='true') {
+      param3 = 'Active'
+    }
+    else {
+      param3 = 'Non-Active'
+    }
     row.innerHTML = `
-    <td>${good.title}</td>
-    <td>${good.desc}</td>
-    <td>${good.active_toggle}</td>
+    <td>${good.param1}</td>
+    <td>${good.param2}</td>
+    <td>${param3}</td>
     <td>${good.filename}</td>
     <td>${good.date}</td>
     `
@@ -41,23 +48,48 @@ class UI {
   static async addGoodToList(good) {
     const list = document.querySelector('#goods-list')
     const row = document.createElement('tr')
+
+    if (good.param3=='true') {
+      param3 = 'Active'
+    }
+    else {
+      param3 = 'Non-Active'
+    }
     row.innerHTML = `
-    <td>${good.title}</td>
-    <td>${good.desc}</td>
-    <td>${good.active_toggle}</td>
+    <td>${good.param1}</td>
+    <td>${good.param2}</td>
+    <td>${param3}</td>
     <td>${good.filename}</td>
     <td>${good.date}</td>
-    <td><a href="#" class="btn btn-danger btn-sm delete">X</a></td>
+    <td>
+    <a href="/admin_update.html" name=${good.id}><div id="change-button">Change</div></a>
+    </td>
     `
     list.appendChild(row)
   }
 
-  static async deleteGood(el) {
-    if(el.classList.contains('delete')) {
-      el.parentElement.parentElement.remove()
-    }
+  //get a product
+  static async displayGood(id) {
+    const response = await fetch(`http://localhost:5000/api/products/${id}`)
+    const StoredGoods = await response.json()
+    await fillForm(StoredGoods)
   }
 
+  //fill form
+  static async fillForm(good) {
+    const form = document.querySelector('#product-form-update')
+    document.querySelector('#name').value = good.param1
+    document.querySelector('#description').value = good.param2
+    if (good.param3=='true') {
+      document.querySelector('#active').checked
+    }
+    else {
+      document.querySelector('#active').unchecked
+    }
+    document.querySelector('#attachment').value = ''
+  }
+
+  //alert
   static async showAlert(message, className) {
     const div = document.createElement('div')
     div.className = `alert alert-${className}`
@@ -70,15 +102,16 @@ class UI {
     setTimeout(() => document.querySelector('.alert').remove(), 3000)
   }
 
+  //clear fields
   static async clearFields() {
     document.querySelector('#name').value = ''
     document.querySelector('#description').value = ''
-    document.querySelector('#active').value = ''
+    document.querySelector('#active').unchecked
     document.querySelector('#attachment').value = ''
   }
 }
 
-// Events: Display Books
+// Events: Display products
 var eventSource_home = new EventSource('http://localhost:5000/api/products_search/limit=20')
 
 eventSource_home.onopen = function(e) {
@@ -99,20 +132,24 @@ document.querySelector('#product-form').addEventListener('submit', (e) => {
   // Get form values
   const name = document.querySelector('#name').value
   const description = document.querySelector('#description').value
-  const active = document.querySelector('#active').value
+  if (document.querySelector('#active').checked) {
+    const active = 'true'
+  } else {
+    const active = 'false'
+  }
   const attachment = document.querySelector('#attachment').value
 
   const date = Date.now()
 
   // Validate
-  if(name === '' || description === '' || active === '' || attachment === '') {
+  if(name === '' || description === '' || active == '' || attachment == '') {
     UI.showAlert('Please fill in all fields', 'danger');
   } else {
     // Instatiate product
     const good = new Good(name, description, active, attachment, date)
 
-    // Add book to API
-    const formData = new FormData(good);
+    // Add product to API
+    const formData = new FormData(good)
     const fileField = document.querySelector('input[type="file"]')
     formData.append(fileField.files[0])
 
@@ -136,20 +173,72 @@ document.querySelector('#product-form').addEventListener('submit', (e) => {
   }
 })
 
-// Event: Remove a Book
-document.querySelector('#goods-list').addEventListener('click', (e) => {
-  // Remove book from UI
-  UI.deleteGood(e.target)
+// Event: Getting update data
+document.querySelector('#change-button').addEventListener('onclick', (e) => {
+const id = e.parentElement.name
+displayGood(id)
 
-  // Remove book from API !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  const response = await fetch(`http://localhost:5000/api/products/${e.target.id}`, {
+delete_button = document.querySelector('#delete-button')
+delete_button.name = id
+}
+
+// Event: Update a product
+document.querySelector('#product-form-update').addEventListener('submit', (e) => {
+  // Prevent actual submit
+  e.preventDefault()
+
+  // Get form values
+  const name = document.querySelector('#name').value
+  const description = document.querySelector('#description').value
+  if (document.querySelector('#active').checked) {
+    const active = 'true'
+  } else {
+    const active = 'false'
+  }
+  const attachment = document.querySelector('#attachment').value
+
+  const date = Date.now()
+
+  // Validate
+  if(name === '' || description === '' || active == '' || attachment == '') {
+    UI.showAlert('Please fill in all fields', 'danger');
+  } else {
+    // Instatiate product
+    const good = new Good(name, description, active, attachment, date)
+
+    // Add book to API
+    const formData = new FormData(good)
+    const fileField = document.querySelector('input[type="file"]')
+    formData.append(fileField.files[0])
+
+    try {
+      const response = await fetch('http://localhost:5000/api/products', {
+        method: 'POST',
+        headers: {'Content-Type': 'multipart/form-data'},
+        body: formData
+      })
+      const result = await response.json()
+      console.log('Успех:', JSON.stringify(result))
+    } catch (error) {
+      console.error('Ошибка:', error)
+    }
+
+    // Show success message
+    UI.showAlert('Product updated', 'success')
+  }
+})
+
+// Event: Remove a good
+document.getElementById('delete_button').onclick((e) => {
+  // Remove good from API
+  const response = await fetch(`http://localhost:5000/api/products/${e.name}`, {
       method: 'DELETE'
     })
     const result = await response.json()
     console.log('Успех:', JSON.stringify(result))
-  } catch (error) {
+    // Show success message
+    UI.showAlert('Product Removed', 'success')
+  if (error) {
     console.error('Ошибка:', error)
   }
-  // Show success message
-  UI.showAlert('Product Removed', 'success')
 })

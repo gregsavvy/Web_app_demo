@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <title>Store Admin</title>
+  </head>
+  <body>
+    <div class="container mt-4">
+
+//navbar
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Store Admin</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse show" id="navbarColor01" style="">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/admin_list.html">List all products
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin_create.html">Create product</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin_update.html">Update product</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+//navbar
+
+//create form
+      <form id="product-form-update">
+        <fieldset>
+          <div class="form-group">
+            <label for="Name">Name</label>
+            <input type="text" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Enter product name">
+          </div>
+          <div class="form-group">
+            <label for="Description">Description</label>
+            <textarea class="form-control" id="description" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="active" checked="">
+              <label class="custom-control-label" for="Active">Active</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="Attachment">Attachment</label>
+            <input type="file" class="form-control-file" id="attachment" aria-describedby="fileHelp">
+          </div>
+        </fieldset>
+        <button type="submit" class="btn btn-primary" name="">Submit</button>
+        <p>||</p>
+        <button type="button" id="delete_button" class="btn btn-secondary" name="">Delete product</button>
+      </form>
+//create form
+
+      </div>
+    </body>
+</html>
