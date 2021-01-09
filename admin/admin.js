@@ -20,13 +20,14 @@ class UI {
   }
 
   static async addGoodToList_home(good) {
+    const {param1, param2, param3, filename, date} = JSON.parse(JSON.stringify(good))
     const list = document.querySelector('#goods-list-home')
     const row = document.createElement('tr')
-    if (good.param3=='true') {
-      param3 = 'Active'
+    if (good.param3 == 'true') {
+      const param3 = 'Active'
     }
     else {
-      param3 = 'Non-Active'
+      const param3 = 'Non-Active'
     }
     row.innerHTML = `
     <td>${good.param1}</td>
@@ -46,14 +47,15 @@ class UI {
   }
 
   static async addGoodToList(good) {
+    const {param1, param2, param3, filename, date} = JSON.parse(JSON.stringify(good))
     const list = document.querySelector('#goods-list')
     const row = document.createElement('tr')
 
     if (good.param3=='true') {
-      param3 = 'Active'
+      const param3 = 'Active'
     }
     else {
-      param3 = 'Non-Active'
+      const param3 = 'Non-Active'
     }
     row.innerHTML = `
     <td>${good.param1}</td>
@@ -62,7 +64,7 @@ class UI {
     <td>${good.filename}</td>
     <td>${good.date}</td>
     <td>
-    <a href="/admin_update.html" name=${good.id}><div id="change-button">Change</div></a>
+    <a href="/admin_update.html" name=${good._id}><div id="change-button">Change</div></a>
     </td>
     `
     list.appendChild(row)
@@ -112,17 +114,14 @@ class UI {
 }
 
 // Events: Display products
-var eventSource_home = new EventSource('http://localhost:5000/api/products_search/limit=20')
-
-eventSource_home.onopen = function(e) {
-  UI.displayGoods_home
-}
-
-var eventSource_list = new EventSource('http://localhost:5000/api/products')
-
-eventSource_list.onopen = function(e) {
-  UI.displayGoods
-}
+document.addEventListener('DOMContentLoaded', (e) => {
+  if (e.target.URL == 'http://localhost:8080/index.html') {
+    UI.displayGoods_home()
+  }
+  else if (e.target.URL == 'http://localhost:8080/admin_list.html') {
+    UI.displayGoods()
+  }
+})
 
 // Event: Add a product
 document.querySelector('#product-form').addEventListener('submit', (e) => {
@@ -154,12 +153,12 @@ document.querySelector('#product-form').addEventListener('submit', (e) => {
     formData.append(fileField.files[0])
 
     try {
-      const response = await fetch('http://localhost:5000/api/products', {
+      const response = fetch('http://localhost:5000/api/products', {
         method: 'POST',
         headers: {'Content-Type': 'multipart/form-data'},
         body: formData
       })
-      const result = await response.json()
+      const result = response.json()
       console.log('Успех:', JSON.stringify(result))
     } catch (error) {
       console.error('Ошибка:', error)
@@ -174,13 +173,13 @@ document.querySelector('#product-form').addEventListener('submit', (e) => {
 })
 
 // Event: Getting update data
-document.querySelector('#change-button').addEventListener('onclick', (e) => {
-const id = e.parentElement.name
-displayGood(id)
+document.querySelector('#change-button').addEventListener('click', (e) => {
+  const id = e.parentElement.name
+  displayGood(id)
 
-delete_button = document.querySelector('#delete-button')
-delete_button.name = id
-}
+  delete_button = document.querySelector('#delete-button')
+  delete_button.name = id
+  })
 
 // Event: Update a product
 document.querySelector('#product-form-update').addEventListener('submit', (e) => {
@@ -212,12 +211,12 @@ document.querySelector('#product-form-update').addEventListener('submit', (e) =>
     formData.append(fileField.files[0])
 
     try {
-      const response = await fetch('http://localhost:5000/api/products', {
+      const response = fetch('http://localhost:5000/api/products', {
         method: 'POST',
         headers: {'Content-Type': 'multipart/form-data'},
         body: formData
       })
-      const result = await response.json()
+      const result = response.json()
       console.log('Успех:', JSON.stringify(result))
     } catch (error) {
       console.error('Ошибка:', error)
@@ -231,10 +230,10 @@ document.querySelector('#product-form-update').addEventListener('submit', (e) =>
 // Event: Remove a good
 document.getElementById('delete_button').onclick((e) => {
   // Remove good from API
-  const response = await fetch(`http://localhost:5000/api/products/${e.name}`, {
+  const response = fetch(`http://localhost:5000/api/products/${e.name}`, {
       method: 'DELETE'
     })
-    const result = await response.json()
+    const result = response.json()
     console.log('Успех:', JSON.stringify(result))
     // Show success message
     UI.showAlert('Product Removed', 'success')

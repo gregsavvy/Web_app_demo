@@ -87,13 +87,13 @@ async function updateProduct(req, res, id) {
        body[fieldname] = val
      })
      busboy.on('finish', function() {
-       const { param1, param2, filename, date } = JSON.parse(JSON.stringify(body))
+       const { param1, param2, param3, filename, date } = JSON.parse(JSON.stringify(body))
 
        Goods.findById(id)
          .then(goods => {
            goods.param1 = param1 || goods.param1
            goods.param2 = param2 || goods.param2
-           goods.param3 = param2 || goods.param3
+           goods.param3 = param3 || goods.param3
            goods.filename = filename || goods.filename
            goods.date = date || goods.date
 
@@ -140,7 +140,7 @@ async function searchProduct(req,res, searchparam, is_goodparam) {
 
 // Gets 20 latest products
 async function getProducts20(req,res) {
-    Goods.find({published: true})
+    Goods.find()
       .sort({'date': -1})
       .limit(20)
       .then(goods => res.end(JSON.stringify(goods)))
