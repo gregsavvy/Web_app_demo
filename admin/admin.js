@@ -133,16 +133,20 @@ document.querySelector('#product-form').addEventListener('submit', (e) => {
   } else {
     // Instantiate product
     const good = new Good(param1, param2, param3, filename, date)
+
     // Add product to API
-    const formData = new FormData(good)
+    const formData = new FormData()
+
+    for (const key in good) {
+    formData.append(key, good[key])
+    }
 
     const files = document.querySelector('#attachment').files[0]
-    formData.append(files)
+    formData.append('file', files)
 
     try {
       const response = fetch('http://localhost:5000/api/products', {
         method: 'POST',
-        headers: {'Content-Type': 'multipart/form-data'},
         body: formData
       })
       const result = response.json()
@@ -196,7 +200,6 @@ document.querySelector('#product-form-update').addEventListener('submit', (e) =>
     try {
       const response = fetch('http://localhost:5000/api/products', {
         method: 'POST',
-        headers: {'Content-Type': 'multipart/form-data'},
         body: formData
       })
       const result = response.json()
