@@ -1,10 +1,9 @@
 // Product class: product object
 class Good {
-  constructor(id, title, desc, active_toggle, filename, date) {
-    this.id = id
-    this.title = title
-    this.desc = desc
-    this.active_toggle = active_toggle
+  constructor(param1, param2, param3, filename, date) {
+    this.param1 = param1
+    this.param2 = param2
+    this.param3 = param3
     this.filename = filename
     this.date = date
     }
@@ -12,55 +11,45 @@ class Good {
 
 // UI class: UI tasks
 class UI {
-  //top 20 for the home page
-  static async displayGoods_home() {
-    const response = await fetch('http://localhost:5000/api/products_search/limit=20')
+  // get array of goods
+  static async getGoods(url) {
+    const response = await fetch(url)
     const StoredGoods = await response.json()
-    StoredGoods.forEach((good) => UI.addGoodToList_home(good))
+    if (url == 'http://localhost:5000/api/products') {
+      StoredGoods.forEach((good) => UI.addGoodToList(good))
+    } else if (url == 'http://localhost:5000/api/products_search/limit=20') {
+      StoredGoods.forEach((good) => UI.addGoodToList_home(good))
+    } else {
+      console.log('Incorrect GET URL')
+    }
   }
 
+  // add products to home page (limit 20)
   static async addGoodToList_home(good) {
     const {param1, param2, param3, filename, date} = JSON.parse(JSON.stringify(good))
     const list = document.querySelector('#goods-list-home')
     const row = document.createElement('tr')
-    if (good.param3 == 'true') {
-      const param3 = 'Active'
-    }
-    else {
-      const param3 = 'Non-Active'
-    }
+
     row.innerHTML = `
     <td>${good.param1}</td>
     <td>${good.param2}</td>
-    <td>${param3}</td>
+    <td>${good.param3}</td>
     <td>${good.filename}</td>
     <td>${good.date}</td>
     `
     list.appendChild(row)
   }
 
-  //full list
-  static async displayGoods() {
-    const response = await fetch('http://localhost:5000/api/products')
-    const StoredGoods = await response.json()
-    StoredGoods.forEach((good) => UI.addGoodToList(good))
-  }
-
+  // full list of products (no pagination)
   static async addGoodToList(good) {
     const {param1, param2, param3, filename, date} = JSON.parse(JSON.stringify(good))
     const list = document.querySelector('#goods-list')
     const row = document.createElement('tr')
 
-    if (good.param3=='true') {
-      const param3 = 'Active'
-    }
-    else {
-      const param3 = 'Non-Active'
-    }
     row.innerHTML = `
     <td>${good.param1}</td>
     <td>${good.param2}</td>
-    <td>${param3}</td>
+    <td>${good.param3}</td>
     <td>${good.filename}</td>
     <td>${good.date}</td>
     <td>
@@ -70,23 +59,23 @@ class UI {
     list.appendChild(row)
   }
 
-  //get a product
-  static async displayGood(id) {
+  //get a product for update page
+  static async getGoodUpdate(id) {
     const response = await fetch(`http://localhost:5000/api/products/${id}`)
     const StoredGoods = await response.json()
-    await fillForm(StoredGoods)
+    await fillFormUpdate(StoredGoods)
   }
 
-  //fill form
-  static async fillForm(good) {
+  //fill form for update page
+  static async fillFormUpdate(good) {
     const form = document.querySelector('#product-form-update')
     document.querySelector('#name').value = good.param1
     document.querySelector('#description').value = good.param2
     if (good.param3=='true') {
-      document.querySelector('#active').checked
+      document.querySelector('#customSwitch1').checked === true
     }
     else {
-      document.querySelector('#active').unchecked
+      document.querySelector('#customSwitch1').checked === false
     }
     document.querySelector('#attachment').value = ''
   }
@@ -108,49 +97,47 @@ class UI {
   static async clearFields() {
     document.querySelector('#name').value = ''
     document.querySelector('#description').value = ''
-    document.querySelector('#active').unchecked
+    document.querySelector('#customSwitch1').unchecked
     document.querySelector('#attachment').value = ''
   }
 }
 
-// Events: Display products
+// Events: fetch API + display products
 document.addEventListener('DOMContentLoaded', (e) => {
-  if (e.target.URL == 'http://localhost:8080/index.html') {
-    UI.displayGoods_home()
+  if (e.target.URL == 'http://localhost:8080/admin_list.html') {
+    UI.getGoods('http://localhost:5000/api/products')
   }
-  else if (e.target.URL == 'http://localhost:8080/admin_list.html') {
-    UI.displayGoods()
+  else if (e.target.URL == 'http://localhost:8080/index.html') {
+    UI.getGoods('http://localhost:5000/api/products_search/limit=20')
+  }
+  else {
+    console.log('DOM without API request loaded')
   }
 })
 
-// Event: Add a product
+// Event: Add a product from create page
 document.querySelector('#product-form').addEventListener('submit', (e) => {
   // Prevent actual submit
   e.preventDefault()
-
   // Get form values
-  const name = document.querySelector('#name').value
-  const description = document.querySelector('#description').value
-  if (document.querySelector('#active').checked) {
-    const active = 'true'
-  } else {
-    const active = 'false'
-  }
-  const attachment = document.querySelector('#attachment').value
+  const param1 = document.querySelector('#name').value
+  const param2 = document.querySelector('#description').value
+  const param3 = document.querySelector('#customSwitch1').checked
+  const filename = document.querySelector('#attachment').value
 
   const date = Date.now()
 
   // Validate
-  if(name === '' || description === '' || active == '' || attachment == '') {
+  if(param1 === '' || param2 === '' || param3 == '' || filename == '') {
     UI.showAlert('Please fill in all fields', 'danger');
   } else {
-    // Instatiate product
-    const good = new Good(name, description, active, attachment, date)
-
+    // Instantiate product
+    const good = new Good(param1, param2, param3, filename, date)
     // Add product to API
     const formData = new FormData(good)
-    const fileField = document.querySelector('input[type="file"]')
-    formData.append(fileField.files[0])
+
+    const files = document.querySelector('#attachment').files[0]
+    formData.append(files)
 
     try {
       const response = fetch('http://localhost:5000/api/products', {
@@ -175,7 +162,7 @@ document.querySelector('#product-form').addEventListener('submit', (e) => {
 // Event: Getting update data
 document.querySelector('#change-button').addEventListener('click', (e) => {
   const id = e.parentElement.name
-  displayGood(id)
+  getGoodUpdate(id)
 
   delete_button = document.querySelector('#delete-button')
   delete_button.name = id
@@ -187,28 +174,24 @@ document.querySelector('#product-form-update').addEventListener('submit', (e) =>
   e.preventDefault()
 
   // Get form values
-  const name = document.querySelector('#name').value
-  const description = document.querySelector('#description').value
-  if (document.querySelector('#active').checked) {
-    const active = 'true'
-  } else {
-    const active = 'false'
-  }
-  const attachment = document.querySelector('#attachment').value
+  const param1 = document.querySelector('#name').value
+  const param2 = document.querySelector('#description').value
+  const param3 = document.querySelector('#customSwitch1').checked
+  const filename = document.querySelector('#attachment').value
 
   const date = Date.now()
 
   // Validate
-  if(name === '' || description === '' || active == '' || attachment == '') {
+  if(param1 === '' || param2 === '' || param3 == '' || filename == '') {
     UI.showAlert('Please fill in all fields', 'danger');
   } else {
     // Instatiate product
-    const good = new Good(name, description, active, attachment, date)
+    const good = new Good(param1, param2, param3, filename, date)
 
     // Add book to API
     const formData = new FormData(good)
-    const fileField = document.querySelector('input[type="file"]')
-    formData.append(fileField.files[0])
+    const files = document.querySelector('#attachment').files[0]
+    formData.append(files)
 
     try {
       const response = fetch('http://localhost:5000/api/products', {

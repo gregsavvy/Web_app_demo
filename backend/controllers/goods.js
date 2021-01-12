@@ -57,7 +57,7 @@ async function createProduct(req,res) {
          body[fieldname] = val
        })
        busboy.on('finish', function() {
-         const { param1, param2, filename, date } = JSON.parse(JSON.stringify(body))
+         const { param1, param2, param3, filename, date } = JSON.parse(JSON.stringify(body))
          const newGoods = new Goods({
            param1,
            param2,
