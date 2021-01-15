@@ -53,7 +53,7 @@ class UI {
     <td>${good.filename}</td>
     <td>${good.date}</td>
     <td>
-    <a href="/admin_update.html" name=${good._id}><div id="change-button">Change</div></a>
+    <a href="/admin_update.html" name=${good._id}><div class="change-button">Change</div></a>
     </td>
     `
     list.appendChild(row)
@@ -61,14 +61,14 @@ class UI {
 
   //get a product for update page
   static async getGoodUpdate(id) {
-    const response = await fetch(`http://localhost:5000/api/products/${id}`)
-    const StoredGoods = await response.json()
-    await fillFormUpdate(StoredGoods)
+      const response = await fetch(`http://localhost:5000/api/products/${id}`)
+      const good = JSON.stringify(response)
+      UI.fillFormUpdate(good)
   }
 
   //fill form for update page
   static async fillFormUpdate(good) {
-    const form = document.querySelector('#product-form-update')
+    const {param1, param2, param3, filename, date} = JSON.parse(good)
     document.querySelector('#name').value = good.param1
     document.querySelector('#description').value = good.param2
     if (good.param3=='true') {
@@ -90,7 +90,7 @@ class UI {
     container.insertBefore(div, form)
 
     // Vanish in 3 seconds
-    setTimeout(() => document.querySelector('.alert').remove(), 3000)
+    setTimeout(() => document.querySelector('.alert').remove(), 5000)
   }
 
   //clear fields
@@ -107,11 +107,27 @@ document.addEventListener('DOMContentLoaded', (e) => {
   if (e.target.URL == 'http://localhost:8080/admin_list.html') {
     UI.getGoods('http://localhost:5000/api/products')
   }
+
   else if (e.target.URL == 'http://localhost:8080/index.html') {
     UI.getGoods('http://localhost:5000/api/products_search/limit=20')
   }
   else {
-    console.log('DOM without API request loaded')
+    console.log('DOM without API mass request loaded')
+  }
+})
+
+// Event: click on change button
+document.querySelector('#goods-list').addEventListener('click', (e) => {
+  if (e.target.className == 'change-button') {
+    const id = e.target.parentElement.name
+    setTimeout(() => {
+      UI.getGoodUpdate(id)
+      delete_button = document.querySelector('#delete-button')
+      delete_button.name = id
+    }, 3000)
+  }
+  else {
+    console.log('Click change button')
   }
 })
 
@@ -163,14 +179,7 @@ document.querySelector('#product-form').addEventListener('submit', (e) => {
   }
 })
 
-// Event: Getting update data
-document.querySelector('#change-button').addEventListener('click', (e) => {
-  const id = e.parentElement.name
-  getGoodUpdate(id)
 
-  delete_button = document.querySelector('#delete-button')
-  delete_button.name = id
-  })
 
 // Event: Update a product
 document.querySelector('#product-form-update').addEventListener('submit', (e) => {
@@ -178,6 +187,7 @@ document.querySelector('#product-form-update').addEventListener('submit', (e) =>
   e.preventDefault()
 
   // Get form values
+  const id = document.querySelector('#delete-button').name
   const param1 = document.querySelector('#name').value
   const param2 = document.querySelector('#description').value
   const param3 = document.querySelector('#customSwitch1').checked
@@ -198,7 +208,7 @@ document.querySelector('#product-form-update').addEventListener('submit', (e) =>
     formData.append(files)
 
     try {
-      const response = fetch('http://localhost:5000/api/products', {
+      const response = fetch(`http://localhost:5000/api/products/${id}`, {
         method: 'POST',
         body: formData
       })
