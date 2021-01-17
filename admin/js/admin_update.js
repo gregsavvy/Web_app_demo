@@ -40,7 +40,7 @@ class UI {
     const div = document.createElement('div')
     div.className = `alert alert-${className}`
     div.appendChild(document.createTextNode(message))
-    const container = document.querySelector('.container')
+    const container = document.querySelector('.main')
     const form = document.querySelector('#product-form') || document.querySelector('#product-form-update')
     container.insertBefore(div, form)
 

@@ -40,21 +40,22 @@
 
         <fieldset>
           <div class="form-group">
-            <label for="Name">Name</label>
-            <input type="text" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Enter product name">
+            <label for="Name">Name:</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter product name">
           </div>
           <div class="form-group">
-            <label for="Description">Description</label>
-            <textarea class="form-control" id="description" rows="3"></textarea>
+            <label for="Description">Description:</label>
+            <textarea class="form-control" id="description" rows="3" placeholder="Enter description"></textarea>
           </div>
           <div class="form-group">
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="customSwitch1">
-              <label class="custom-control-label" for="customSwitch1">Active</label>
-            </div>
+          <label class="switch">
+            <input type="checkbox" id="customSwitch1">
+            <span class="slider round"></span>
+          </label>
+          Active
           </div>
           <div class="form-group">
-            <label for="Attachment">Attachment</label>
+            <label for="Attachment">Attachment:</label>
             <input type="file" class="form-control-file" id="attachment" aria-describedby="fileHelp">
           </div>
           </fieldset>
