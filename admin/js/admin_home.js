@@ -35,7 +35,7 @@ class UI {
     <td>${good.param2}</td>
     <td>${good.param3}</td>
     <td>${good.filename}</td>
-    <td>${good.date}</td>
+    <td>${good.date.slice(0,10)}</td>
     `
     list.appendChild(row)
   }
@@ -51,7 +51,7 @@ class UI {
     <td>${good.param2}</td>
     <td>${good.param3}</td>
     <td>${good.filename}</td>
-    <td>${good.date}</td>
+    <td>${good.date.slice(0,10)}</td>
     <td>
     <a href="/admin_update.html" name=${good._id}><div class="change-button">Change</div></a>
     </td>
