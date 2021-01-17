@@ -2,7 +2,7 @@ var path = require('path')
 var express = require('express')
 var app = express()
 
-var dir = path.resolve(__dirname)
+var dir = path.resolve(__dirname, '../')
 
 app.use(express.static(dir))
 
