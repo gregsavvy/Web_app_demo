@@ -46,6 +46,13 @@ const server = http.createServer((req, res) => {
         const id = req.url.split('/')[3]
         deleteProduct(req, res, id)
     }
+    // OPTIONS request
+    else if(req.url.match(/\w+/) && req.method === 'OPTIONS') {
+        res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type'})
+        res.end()
+    }
     // ADDITIONAL SEARCH AND FILTER ROUTES
     else if(req.url.match(/\/api\/products_search\/.+\/is_good\=\w+/) && req.method === 'GET') {
       res.writeHead(200, {'Access-Control-Allow-Origin': '*',

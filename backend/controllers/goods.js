@@ -102,10 +102,6 @@ async function updateProduct(req, res, id) {
              .catch(err => res.end(JSON.stringify(err)))
          })
          .catch(err => JSON.stringify(err))
-
-       newGoods.save()
-         .then(() => res.end('Done!'))
-         .catch(err => res.end(JSON.stringify(err)))
       })
     return req.pipe(busboy)
 }

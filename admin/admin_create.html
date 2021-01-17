@@ -3,19 +3,18 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap.css">
     <title>Store Admin</title>
   </head>
   <body>
-    <div class="container mt-4">
 
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a class="navbar-brand" href="/index.html">Store Admin</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="navbar-collapse collapse show" id="navbarColor01" style="">
+        <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
               <a class="nav-link" href="/admin_list.html">List all products
@@ -28,7 +27,9 @@
         </div>
       </nav>
 
+      <div class="container mt-4">
       <form id="product-form">
+        <div class="container mt-4">
         <fieldset>
           <div class="form-group">
             <label for="Name">Name</label>
@@ -51,10 +52,12 @@
             <input type="file" class="form-control-file" id="attachment" aria-describedby="fileHelp">
           </div>
         </fieldset>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+        <button id="create-button" type="submit" class="btn btn-primary">Submit</button>
+        </div>
 
+      </form>
       </div>
+
     </body>
-    <script src="admin.js"> </script>
+    <script src="admin_create.js"> </script>
 </html>
