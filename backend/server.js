@@ -1,21 +1,24 @@
 // require modules
 const http = require('http')
-const mongoose = require('mongoose')
 const path = require('path')
-const { getProducts, getProduct, createProduct, updateProduct, deleteProduct, searchProduct, getProducts20 } = require('./controllers/goods')
 
+const mongoose = require('mongoose')
+
+const { getProducts, getProduct, createProduct, updateProduct, deleteProduct, searchProduct, getProductsLimit } = require('./controllers/goods')
+const { getUser, getUsers, createUser, loginUser } = require('./controllers/users')
 require('dotenv').config()
 
-// database connection
+// Product database connection
 const uri = process.env.ATLAS_URI
 mongoose.connect(uri, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
-const connection = mongoose.connection
-connection.once('open', () => {
+const productConnection = mongoose.connection
+productConnection.once('open', () => {
   console.log('MongoDB Atlas connection established')
 })
 
 // server routes
 const server = http.createServer((req, res) => {
+    // PRODUCTS //
     // STANDARD CRUD ROUTES
     if(req.url === '/api/products' && req.method === 'GET') {
         res.writeHead(200, {'Access-Control-Allow-Origin': '*',
@@ -62,12 +65,50 @@ const server = http.createServer((req, res) => {
       const is_goodparam = req.url.split('/')[4].slice(8).replace('%20', ' ') || 'null'
       searchProduct(req, res, searchparam, is_goodparam)
     }
-    else if(req.url.match(/\/api\/products_search\/limit\=20/) && req.method === 'GET') {
+    else if(req.url.match(/\/api\/products_search\/limit\=\w+/) && req.method === 'GET') {
       res.writeHead(200, {'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type'})
-      getProducts20(req, res)
+      const limit = req.url.split('/')[3].slice(6) || 20
+      getProductsLimit(req, res, limit)
     }
+
+    // USERS //
+    // Get all users
+    else if(req.url == '/api/users' && req.method === 'GET') {
+      res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'})
+      getUsers(req, res)
+    }
+
+    // Get a user, check a client cookie against stored cookie
+    else if(req.url.match(/\/api\/users\/\w+/) && req.method === 'GET') {
+      res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'})
+      const username = req.url.split('/')[3]
+      const clientcookie = req.headers['Cookies']
+      getUser(req, res, username, clientcookie)
+    }
+
+    // Create a user
+    else if(req.url == '/api/users' && req.method === 'POST') {
+      res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'})
+      createUser(req, res)
+    }
+
+    // Login, store cookie and return a session cookie to client
+    else if(req.url.match(/\/api\/users\/\w+/) && req.method === 'PUT') {
+      res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'})
+      const username = req.url.split('/')[3]
+      loginUser(req, res, username)
+    }
+
     // ERROR HANDLE
     else {
         res.writeHead(404, { 'Content-Type': 'application/json' })

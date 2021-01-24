@@ -135,10 +135,10 @@ async function searchProduct(req,res, searchparam, is_goodparam) {
     }
 
 // Gets 20 latest products
-async function getProducts20(req,res) {
+async function getProductsLimit(req,res, limit) {
     Goods.find()
       .sort({'date': -1})
-      .limit(20)
+      .limit(Number(limit))
       .then(goods => res.end(JSON.stringify(goods)))
       .catch(err => res.end(JSON.stringify(err)))
     }
@@ -150,5 +150,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   searchProduct,
-  getProducts20
+  getProductsLimit
 }

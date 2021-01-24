@@ -112,15 +112,9 @@ document.addEventListener('DOMContentLoaded', (e) => {
     UI.getGoods(url)
   }
 
-  else if (e.target.URL == 'http://localhost:8080/index.html') {
+  else if (e.target.URL == 'http://localhost:8080/index.html' || 'http://localhost:8080') {
     const url = 'http://localhost:5000/api/products_search/limit=20'
     UI.getGoods(url)
-  }
-
-  else if (e.target.URL == 'http://localhost:8080/admin_update.html') {
-    let id = sessionStorage.getItem('id')
-    UI.getGoodUpdate(id)
-    document.querySelector('#delete-button').name = id
   }
 
   else {
@@ -136,111 +130,4 @@ document.querySelector('#products-list').addEventListener('click', (e) => {
   else {
     console.log('Click change button')
   }
-})
-
-// Event: Add a product from create page
-document.querySelector('#product-form').addEventListener('submit', (e) => {
-  // Prevent actual submit
-  e.preventDefault()
-  // Get form values
-  const param1 = document.querySelector('#name').value
-  const param2 = document.querySelector('#description').value
-  const param3 = document.querySelector('#customSwitch1').checked
-  const filename = document.querySelector('#attachment').value
-
-  const date = Date.now()
-
-  // Validate
-  if(param1 === '' || param2 === '' || filename == '') {
-    UI.showAlert('Please fill in all fields', 'danger')
-  } else {
-    // Instantiate product
-    const good = new Good(param1, param2, param3, filename, date)
-
-    // Add product to API
-    const formData = new FormData()
-
-    for (const key in good) {
-    formData.append(key, good[key])
-    }
-
-    const files = document.querySelector('#attachment').files[0]
-    formData.append('file', files)
-
-    try {
-      const response = fetch('http://localhost:5000/api/products', {
-        method: 'POST',
-        body: formData
-      })
-      console.log('Успех:', JSON.stringify(result))
-    } catch (error) {
-      console.error('Ошибка:', error)
-    }
-
-    // Show success message
-    UI.showAlert('Product added', 'success')
-
-    // Clear fields
-    UI.clearFields()
-  }
-})
-
-// Event: Update a product
-document.querySelector('#product-form-update').addEventListener('submit', (e) => {
-  // Prevent actual submit
-  e.preventDefault()
-  let id = sessionStorage.getItem('id')
-
-  // Get form values
-  const param1 = document.querySelector('#name').value
-  const param2 = document.querySelector('#description').value
-  const param3 = document.querySelector('#customSwitch1').checked
-  const filename = document.querySelector('#attachment').value
-
-  const date = Date.now()
-
-  // Validate
-  if(param1 === '' || param2 === '' || filename == '') {
-    UI.showAlert('Please fill in all fields', 'danger')
-  } else {
-    // Instatiate product
-    const good = new Good(param1, param2, param3, filename, date)
-    // Add book to API
-    const formData = new FormData()
-
-    for (const key in good) {
-    formData.append(key, good[key])
-    }
-
-    const files = document.querySelector('#attachment').files[0]
-    formData.append('file', files)
-
-    try {
-      const response = fetch(`http://localhost:5000/api/products/${id}`, {
-        method: 'PUT',
-        body: formData
-      })
-    } catch (error) {
-      console.error('Ошибка:', error)
-    }
-
-    // Show success message
-    UI.showAlert('Product updated', 'success')
-  }
-})
-
-// Event: Remove a good
-document.querySelector('#delete-button').addEventListener('click', (e) => {
-  // Remove good from API
-  const id = sessionStorage.getItem('id')
-
-  try {
-  const response = fetch(`http://localhost:5000/api/products/${id}`, {
-      method: 'DELETE'
-    })
-    // Show success message
-    UI.showAlert('Product Removed', 'success')
-  } catch (error) {
-      console.error('Ошибка:', error)
-    }
 })
