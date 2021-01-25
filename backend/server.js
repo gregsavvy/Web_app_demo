@@ -5,7 +5,8 @@ const path = require('path')
 const mongoose = require('mongoose')
 
 const { getProducts, getProduct, createProduct, updateProduct, deleteProduct, searchProduct, getProductsLimit } = require('./controllers/goods')
-const { getUser, getUsers, createUser, loginUser } = require('./controllers/users')
+const { getUser, getUsers, createUser, loginUser, logoutUser } = require('./controllers/users')
+
 require('dotenv').config()
 
 // Product database connection
@@ -106,7 +107,17 @@ const server = http.createServer((req, res) => {
       'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type'})
       const username = req.url.split('/')[3]
+      const password = req.body.password
       loginUser(req, res, username)
+    }
+
+    // Logout, delete session cookie
+    else if(req.url.match(/\/api\/users\/\w+/) && req.method === 'DELETE') {
+      res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'})
+      const username = req.url.split('/')[3]
+      logoutUser(req, res, username)
     }
 
     // ERROR HANDLE

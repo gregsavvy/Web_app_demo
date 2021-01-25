@@ -79,13 +79,13 @@ async function createUser(req, res) {
 }
 
 // 4 Login user and send session cookie
-async function loginUser(req,res, username) {
+async function loginUser(req,res, username, password) {
   fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
     if (err) throw err
 
     const users = JSON.parse(data)
     users.forEach((user) => {
-      if (user.username == username) {
+      if (user.username == username && user.password == password) {
         const returnUser = user
         user.session = '3'
       } else {
@@ -100,9 +100,32 @@ async function loginUser(req,res, username) {
     })
   }
 
+// 5 Logout user and delete session cookie
+async function loginUser(req,res, username, password) {
+  fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
+    if (err) throw err
+
+    const users = JSON.parse(data)
+    users.forEach((user) => {
+      if (user.username == username) {
+        const returnUser = user
+        user.session = ''
+      } else {
+        console.log('Session facilitation not required!')
+      }
+    })
+    fs.writeFile(path.resolve('./', './models/users.json'), JSON.stringify(users), 'utf8', function (err) {
+      if (err) throw err
+      })
+
+    return res.end(JSON.stringify(returnUser))
+      })
+    }
+
 module.exports = {
   getUser,
   getUsers,
   createUser,
-  loginUser
+  loginUser,
+  logoutUser
 }
