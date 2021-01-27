@@ -24,23 +24,29 @@ const path = require('path')
 
 // 1 Gets a user and checks against a session cookie (Bearer token)
 async function getUser(req,res) {
-
+  try {
   const body = await readyJSON(req)
   const { username } = JSON.parse(body)
+  const session = req.headers['authorization'] || 'Bearer Not authorized'
 
-  const session = req.headers['authorization'].slice(7)
   fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
     if (err) throw err
 
     const users = JSON.parse(data)
     const user = users.filter((user) => {
-      if (user.username == username && user.session == session) {
-        return res.end(JSON.stringify(user))
-      } else {
-        console.log(`Authorization requested for ${user}!`)
+      if (user.username == username && user.session == session.slice(7)) {
+        return res.write(JSON.stringify(user))
+      }
+      else {
+        return res.write('')
       }
     })
-  })
+    res.end()
+    })
+  }
+  catch {
+    console.log(error)
+  }
 }
 
 // 2 Gets all users
@@ -89,7 +95,7 @@ async function createUser(req, res) {
 
 // 4 Login user and send session cookie
 async function loginUser(req,res) {
-
+  try {
   const body = await readyJSON(req)
   const { username, password } = JSON.parse(body)
 
@@ -100,21 +106,25 @@ async function loginUser(req,res) {
     users.forEach((user) => {
       if (user.username == username && user.password == password) {
         const returnUser = user
-        user.session = '3'
-        return res.end(JSON.stringify(returnUser))
+        user.session = '123'
+        return res.write(JSON.stringify(returnUser))
       } else {
-        console.log(`Password check for ${user} requested!`)
+        return res.write('')
       }
     })
+    res.end()
     fs.writeFile(path.resolve('./', './models/users.json'), JSON.stringify(users), 'utf8', function (err) {
       if (err) throw err
       })
     })
+  } catch (error) {
+      console.log(error)
   }
+}
 
 // 5 Logout user and delete session cookie
 async function logoutUser(req,res) {
-
+  try {
   const body = await readyJSON(req)
   const { username } = JSON.parse(body)
 
@@ -133,7 +143,10 @@ async function logoutUser(req,res) {
       if (err) throw err
       })
     })
+  }  catch (error) {
+      console.log(error)
   }
+}
 
 module.exports = {
   getUser,

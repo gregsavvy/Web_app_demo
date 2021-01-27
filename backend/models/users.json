@@ -1,3 +1,3 @@
-[{"username":"admin1","email":"admin1@admin.com","password":"admin","date":"2021-01-01"},
-  {"username":"admin2","email":"admin2@admin.com","password":"admin","date":"2021-01-01"},
-  {"username":"admin3","email":"admin3@admin.com","password":"admin","date":"2021-01-01","session":""}]
+[{"username":"admin1","email":"admin1@admin.com","password":"admin","date":"2021-01-01","session":""},
+  {"username":"admin2","email":"admin2@admin.com","password":"admin","date":"2021-01-01","session":"3"},
+  {"username":"admin3","email":"admin3@admin.com","password":"admin","date":"2021-01-01","session":"123"}]
