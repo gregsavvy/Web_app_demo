@@ -19,7 +19,7 @@ productConnection.once('open', () => {
 
 // server routes
 const server = http.createServer((req, res) => {
-    // PRODUCTS //
+    // PRODUCTS API, MongoDB Atlas //
     // STANDARD CRUD ROUTES
     if(req.url === '/api/products' && req.method === 'GET') {
         res.writeHead(200, {'Access-Control-Allow-Origin': '*',
@@ -50,7 +50,7 @@ const server = http.createServer((req, res) => {
         const id = req.url.split('/')[3]
         deleteProduct(req, res, id)
     }
-    // OPTIONS request
+    // OPTIONS request for preflight
     else if(req.url.match(/\w+/) && req.method === 'OPTIONS') {
         res.writeHead(200, {'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
@@ -74,7 +74,7 @@ const server = http.createServer((req, res) => {
       getProductsLimit(req, res, limit)
     }
 
-    // USERS //
+    // USERS API, JSON file //
     // Get all users
     else if(req.url == '/api/users' && req.method === 'GET') {
       res.writeHead(200, {'Access-Control-Allow-Origin': '*',
@@ -84,13 +84,11 @@ const server = http.createServer((req, res) => {
     }
 
     // Get a user, check a client cookie against stored cookie
-    else if(req.url.match(/\/api\/users\/\w+/) && req.method === 'GET') {
+    else if(req.url.match('/api/users/session_check') && req.method === 'GET') {
       res.writeHead(200, {'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type'})
-      const username = req.url.split('/')[3]
-      const clientcookie = req.headers['Cookies']
-      getUser(req, res, username, clientcookie)
+      getUser(req, res)
     }
 
     // Create a user
@@ -102,22 +100,19 @@ const server = http.createServer((req, res) => {
     }
 
     // Login, store cookie and return a session cookie to client
-    else if(req.url.match(/\/api\/users\/\w+/) && req.method === 'PUT') {
+    else if(req.url.match('/api/users') && req.method === 'PUT') {
       res.writeHead(200, {'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type'})
-      const username = req.url.split('/')[3]
-      const password = req.body.password
-      loginUser(req, res, username)
+      loginUser(req, res)
     }
 
     // Logout, delete session cookie
-    else if(req.url.match(/\/api\/users\/\w+/) && req.method === 'DELETE') {
+    else if(req.url.match('/api/users') && req.method === 'DELETE') {
       res.writeHead(200, {'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type'})
-      const username = req.url.split('/')[3]
-      logoutUser(req, res, username)
+      logoutUser(req, res)
     }
 
     // ERROR HANDLE

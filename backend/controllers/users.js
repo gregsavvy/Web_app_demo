@@ -7,7 +7,6 @@ const path = require('path')
       return new Promise((resolve, reject) => {
           try {
               let body = ''
-              // var form = new formidable.IncomingForm()
 
               req.on('data', (chunk) => {
                   body += chunk.toString()
@@ -20,19 +19,29 @@ const path = require('path')
               reject(err)
           }
       })
-  }
+}
 // end utility
 
-// 1 Gets a user and checks against a session cookie
-async function getUser(req,res, username, clientcookie) {
+// 1 Gets a user and checks against a session cookie (Bearer token)
+async function getUser(req,res) {
+
+  const body = await readyJSON(req)
+  const { username } = JSON.parse(body)
+
+  const session = req.headers['authorization'].slice(7)
   fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
     if (err) throw err
 
     const users = JSON.parse(data)
-    const user = users.filter(user => user.username == username && user.session == clientcookie)
-    return res.end(JSON.stringify(user))
+    const user = users.filter((user) => {
+      if (user.username == username && user.session == session) {
+        return res.end(JSON.stringify(user))
+      } else {
+        console.log(`Authorization requested for ${user}!`)
+      }
     })
-  }
+  })
+}
 
 // 2 Gets all users
 async function getUsers(req,res) {
@@ -79,7 +88,11 @@ async function createUser(req, res) {
 }
 
 // 4 Login user and send session cookie
-async function loginUser(req,res, username, password) {
+async function loginUser(req,res) {
+
+  const body = await readyJSON(req)
+  const { username, password } = JSON.parse(body)
+
   fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
     if (err) throw err
 
@@ -88,20 +101,23 @@ async function loginUser(req,res, username, password) {
       if (user.username == username && user.password == password) {
         const returnUser = user
         user.session = '3'
+        return res.end(JSON.stringify(returnUser))
       } else {
-        console.log('Session facilitation not required!')
+        console.log(`Password check for ${user} requested!`)
       }
     })
     fs.writeFile(path.resolve('./', './models/users.json'), JSON.stringify(users), 'utf8', function (err) {
       if (err) throw err
       })
-
-    return res.end(JSON.stringify(returnUser))
     })
   }
 
 // 5 Logout user and delete session cookie
-async function loginUser(req,res, username, password) {
+async function logoutUser(req,res) {
+
+  const body = await readyJSON(req)
+  const { username } = JSON.parse(body)
+
   fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
     if (err) throw err
 
@@ -110,17 +126,14 @@ async function loginUser(req,res, username, password) {
       if (user.username == username) {
         const returnUser = user
         user.session = ''
-      } else {
-        console.log('Session facilitation not required!')
+        return res.end(JSON.stringify(returnUser))
       }
     })
     fs.writeFile(path.resolve('./', './models/users.json'), JSON.stringify(users), 'utf8', function (err) {
       if (err) throw err
       })
-
-    return res.end(JSON.stringify(returnUser))
-      })
-    }
+    })
+  }
 
 module.exports = {
   getUser,
