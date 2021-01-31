@@ -51,7 +51,7 @@ const server = http.createServer((req, res) => {
         deleteProduct(req, res, id)
     }
     // OPTIONS request for preflight
-    else if(req.url.match(/\w+/) && req.method === 'OPTIONS') {
+    else if(req.url.match(/.+/) && req.method === 'OPTIONS') {
         res.writeHead(200, {'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type'})
@@ -101,17 +101,11 @@ const server = http.createServer((req, res) => {
 
     // Login, store cookie and return a session cookie to client
     else if(req.url.match('/api/users') && req.method === 'PUT') {
-      res.writeHead(200, {'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'})
       loginUser(req, res)
     }
 
     // Logout, delete session cookie
     else if(req.url.match('/api/users') && req.method === 'DELETE') {
-      res.writeHead(200, {'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'})
       logoutUser(req, res)
     }
 

@@ -99,6 +99,7 @@ document.querySelector('#product-form-update').addEventListener('submit', (e) =>
         method: 'PUT',
         body: formData
       })
+      console.log('Успех')
     } catch (error) {
       console.error('Ошибка:', error)
     }

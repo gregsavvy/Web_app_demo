@@ -410,6 +410,24 @@ img {
   border-radius: 0.25rem;
 }
 
+.alert-login {
+  position: absolute;
+  padding: 0.3rem 1rem;
+  margin-bottom: 15rem;
+  margin-left: 5rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+.alert-register {
+  position: absolute;
+  padding: 0.3rem 1rem;
+  margin-bottom: 26rem;
+  margin-left: 11rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
 .alert-success {
   color: #0c6251;
   background-color: #d1f2eb;

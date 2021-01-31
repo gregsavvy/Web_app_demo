@@ -22,23 +22,20 @@ const path = require('path')
 }
 // end utility
 
-// 1 Gets a user and checks against a session cookie (Bearer token)
+// 1 Gets a user and checks against a session cookie (cookie session token)
 async function getUser(req,res) {
   try {
   const body = await readyJSON(req)
   const { username } = JSON.parse(body)
-  const session = req.headers['authorization'] || 'Bearer Not authorized'
+  const session = req.headers["Cookie"] || 'SessionID Not authorized'
 
   fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
     if (err) throw err
 
     const users = JSON.parse(data)
     const user = users.filter((user) => {
-      if (user.username == username && user.session == session.slice(7)) {
-        return res.write(JSON.stringify(user))
-      }
-      else {
-        return res.write('')
+      if (user.username == username && user.session == session) {
+        return res.write('Authorized')
       }
     })
     res.end()
@@ -96,27 +93,44 @@ async function createUser(req, res) {
 // 4 Login user and send session cookie
 async function loginUser(req,res) {
   try {
-  const body = await readyJSON(req)
-  const { username, password } = JSON.parse(body)
+    const body = await readyJSON(req)
+    const { username, password } = JSON.parse(body)
 
-  fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
-    if (err) throw err
-
-    const users = JSON.parse(data)
-    users.forEach((user) => {
-      if (user.username == username && user.password == password) {
-        const returnUser = user
-        user.session = '123'
-        return res.write(JSON.stringify(returnUser))
-      } else {
-        return res.write('')
-      }
-    })
-    res.end()
-    fs.writeFile(path.resolve('./', './models/users.json'), JSON.stringify(users), 'utf8', function (err) {
+    fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
       if (err) throw err
+      const users = JSON.parse(data)
+
+      const access_promise = new Promise((resolve,reject) => {
+        const access_user = JSON.stringify('Not Authorized')
+        const cookie_session = 'none'
+        users.forEach((user) => {
+        if (user.username == username && user.password == password) {
+          user.session = '123'
+          const cookie_session = user.session
+          const access_user = JSON.stringify(user.username)
+          const session_data = `${access_user}/${cookie_session}`
+          resolve(session_data)
+        }
       })
+      const session_data = `${access_user}/${cookie_session}`
+      resolve(session_data)
     })
+      access_promise.then((session_data) => {
+        const access_user = session_data.split('/')[0]
+        const cookie_session = session_data.split('/')[1]
+        res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Set-Cookie': `sessionId=${cookie_session}; path=/; HttpOnly`})
+        // No "Secure" param on cookie (https implementation required on server)
+        res.write(access_user)
+        res.end()
+      })
+
+      fs.writeFile(path.resolve('./', './models/users.json'), JSON.stringify(users), 'utf8', function (err) {
+        if (err) throw err
+        })
+      })
   } catch (error) {
       console.log(error)
   }
@@ -134,9 +148,13 @@ async function logoutUser(req,res) {
     const users = JSON.parse(data)
     users.forEach((user) => {
       if (user.username == username) {
-        const returnUser = user
         user.session = ''
-        return res.end(JSON.stringify(returnUser))
+        res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        // No Secure on cookie (https implementation required on server)
+        'Set-Cookie': `sessionId=none; HttpOnly`})
+        res.end(JSON.stringify('User logged out!'))
       }
     })
     fs.writeFile(path.resolve('./', './models/users.json'), JSON.stringify(users), 'utf8', function (err) {

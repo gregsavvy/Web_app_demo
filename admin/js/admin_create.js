@@ -72,7 +72,7 @@ document.querySelector('#product-form').addEventListener('submit', (e) => {
         method: 'POST',
         body: formData
       })
-      console.log('Успех:', JSON.stringify(result))
+      console.log('Успех')
     } catch (error) {
       console.error('Ошибка:', error)
     }
