@@ -2,6 +2,10 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 
+require('dotenv').config()
+
+const domain = process.env.DOMAIN
+
 // forming JSON body - utility function for JSON parsing
   function readyJSON(req) {
       return new Promise((resolve, reject) => {
@@ -118,10 +122,11 @@ async function loginUser(req,res) {
       access_promise.then((session_data) => {
         const access_user = session_data.split('/')[0]
         const cookie_session = session_data.split('/')[1]
-        res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+        res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,
         'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
-        'Set-Cookie': `sessionId=${cookie_session}; path=/; HttpOnly`})
+        'Access-Control-Allow-Credentials': 'true',
+        'Set-Cookie': `sessionId=${cookie_session}; SameSite=Lax; path=/; HttpOnly`})
         // No "Secure" param on cookie (https implementation required on server)
         res.write(access_user)
         res.end()
@@ -149,11 +154,12 @@ async function logoutUser(req,res) {
     users.forEach((user) => {
       if (user.username == username) {
         user.session = ''
-        res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+        res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,
         'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
-        // No Secure on cookie (https implementation required on server)
-        'Set-Cookie': `sessionId=none; HttpOnly`})
+        'Access-Control-Allow-Credentials': 'true',
+        'Set-Cookie': `sessionId=none; SameSite=Lax; path=/; HttpOnly`})
+        // No "Secure" param on cookie (https implementation required on server)
         res.end(JSON.stringify('User logged out!'))
       }
     })

@@ -84,3 +84,31 @@ document.querySelector('#product-form').addEventListener('submit', (e) => {
     UI.clearFields()
   }
 })
+
+// Event: click on logout button
+document.querySelector('.sidebar').addEventListener('click', (e) => {
+  if (e.target.className == 'logout-button') {
+    try {
+      const username = sessionStorage.getItem('username')
+      const response = fetch('http://localhost:5000/api/users', {
+        method: 'DELETE',
+        cache: 'no-cache',
+        credentials: 'include',
+        body: JSON.stringify(username)
+      }).then(response => response.json())
+      .then(data => {
+        if (data == 'User logged out!') {
+          window.location.replace('http://localhost:8080/admin_login.html')
+          sessionStorage.setItem('username', '')
+        } else {
+          console.log('Something went wrong')
+        }
+      })
+      .catch(error => console.error(error))
+
+    } catch (error) {
+      console.error('Ошибка:', error)
+      UI.showAlert('Something went wrong', 'danger')
+    }
+  }
+})

@@ -9,6 +9,8 @@ const { getUser, getUsers, createUser, loginUser, logoutUser } = require('./cont
 
 require('dotenv').config()
 
+const domain = process.env.DOMAIN
+
 // Product database connection
 const uri = process.env.ATLAS_URI
 mongoose.connect(uri, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
@@ -52,9 +54,10 @@ const server = http.createServer((req, res) => {
     }
     // OPTIONS request for preflight
     else if(req.url.match(/.+/) && req.method === 'OPTIONS') {
-        res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+        res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,
         'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'})
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Credentials': 'true'})
         res.end()
     }
     // ADDITIONAL SEARCH AND FILTER ROUTES
@@ -77,7 +80,7 @@ const server = http.createServer((req, res) => {
     // USERS API, JSON file //
     // Get all users
     else if(req.url == '/api/users' && req.method === 'GET') {
-      res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+      res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,
       'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type'})
       getUsers(req, res)
@@ -85,15 +88,16 @@ const server = http.createServer((req, res) => {
 
     // Get a user, check a client cookie against stored cookie
     else if(req.url.match('/api/users/session_check') && req.method === 'GET') {
-      res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+      res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,
       'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'})
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Credentials': 'true'})
       getUser(req, res)
     }
 
     // Create a user
     else if(req.url == '/api/users' && req.method === 'POST') {
-      res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+      res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,
       'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type'})
       createUser(req, res)

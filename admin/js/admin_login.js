@@ -48,12 +48,14 @@ document.querySelector('#login-form').addEventListener('submit', (e) => {
       const response = fetch('http://localhost:5000/api/users', {
         method: 'PUT',
         cache: 'no-cache',
+        credentials: 'include',
         body: JSON.stringify(data)
       }).then(response => response.json())
       .then(data => {
         if (data == 'Not Authorized') {
           UI.showAlert('Incorrect login or password', 'danger')
         } else if (data == username) {
+          sessionStorage.setItem('username', username)
           window.location.replace('http://localhost:8080')
         } else {
           UI.showAlert('Something went wrong', 'danger')

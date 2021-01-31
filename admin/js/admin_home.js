@@ -127,7 +127,33 @@ document.querySelector('#products-list').addEventListener('click', (e) => {
   if (e.target.className == 'change-button') {
     sessionStorage.setItem('id', e.target.parentElement.name)
   }
-  else {
-    console.log('Click change button')
+})
+
+// Event: click on logout button
+document.querySelector('.sidebar').addEventListener('click', (e) => {
+  console.log(e.target)
+  if (e.target.parentElement.id == 'logout-button' || e.target.id == 'logout-button') {
+    const username = sessionStorage.getItem('username')
+//need promise!!!
+    try {
+      const response = fetch('http://localhost:5000/api/users', {
+        method: 'DELETE',
+        credentials: 'include',
+        body: JSON.stringify(`username: ${username}`)
+      }).then(response => response.json())
+      .then(data => {
+        if (data == 'User logged out!') {
+          window.location.replace('http://localhost:8080/admin_login.html')
+          sessionStorage.setItem('username', '')
+        } else {
+          console.log('Something went wrong')
+        }
+      })
+      .catch(error => console.error(error))
+
+    } catch (error) {
+      console.error('Ошибка:', error)
+      UI.showAlert('Something went wrong', 'danger')
+    }
   }
 })
