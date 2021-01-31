@@ -59,30 +59,6 @@ class UI {
     list.appendChild(row)
   }
 
-  //get a product for update page
-  static async getGoodUpdate(id) {
-      const response = await fetch(`http://localhost:5000/api/products/${id}`)
-      const StoredGood = await response.json()
-      UI.fillFormUpdate(StoredGood)
-  }
-
-  //fill form for update page
-  static async fillFormUpdate(good) {
-    const {param1, param2, param3, filename, date} = JSON.parse(JSON.stringify(good))
-    document.querySelector('#name').value = good.param1
-    document.querySelector('#description').value = good.param2
-    if (good.param3===true) {
-      document.querySelector('#customSwitch1').checked = true
-    }
-    else if (good.param3===false) {
-      document.querySelector('#customSwitch1').checked = false
-    }
-    else {
-      document.querySelector('#customSwitch1').checked = false
-    }
-    document.querySelector('#attachment').value = ''
-  }
-
   //alert
   static async showAlert(message, className) {
     const div = document.createElement('div')
@@ -119,13 +95,6 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
   else {
     console.log('DOM without API request loaded')
-  }
-})
-
-// Event: click on change button
-document.querySelector('#products-list').addEventListener('click', (e) => {
-  if (e.target.className == 'change-button') {
-    sessionStorage.setItem('id', e.target.parentElement.name)
   }
 })
 

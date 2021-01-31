@@ -55,7 +55,7 @@ document.querySelector('#login-form').addEventListener('submit', (e) => {
         if (data == 'Not Authorized') {
           UI.showAlert('Incorrect login or password', 'danger')
         } else if (data == username) {
-          sessionStorage.setItem('username', username)
+          localStorage.setItem('username', username)
           window.location.replace('http://localhost:8080')
         } else {
           UI.showAlert('Something went wrong', 'danger')

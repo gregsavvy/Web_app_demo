@@ -31,15 +31,16 @@ async function getUser(req,res) {
   try {
   const body = await readyJSON(req)
   const { username } = JSON.parse(body)
-  const session = req.headers["Cookie"] || 'SessionID Not authorized'
+  const session = req.headers.cookie || 'SessionID Not authorized'
+  console.log(session.slice(10,13))
 
   fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
     if (err) throw err
 
     const users = JSON.parse(data)
     const user = users.filter((user) => {
-      if (user.username == username && user.session == session) {
-        return res.write('Authorized')
+      if (user.username == username && user.session == session.slice(10,13)) {
+        return res.write(JSON.stringify('Authorized'))
       }
     })
     res.end()
