@@ -13,7 +13,7 @@ const domain = process.env.DOMAIN
 
 // Product database connection
 const uri = process.env.ATLAS_URI
-mongoose.connect(uri, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
+mongoose.connect(`${uri}`, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
 const productConnection = mongoose.connection
 productConnection.once('open', () => {
   console.log('MongoDB Atlas connection established')
@@ -87,12 +87,13 @@ const server = http.createServer((req, res) => {
     }
 
     // Get a user, check a client cookie against stored cookie
-    else if(req.url.match('/api/users/session_check') && req.method === 'GET') {
+    else if(req.url.match(/\/api\/users\/.+/) && req.method === 'GET') {
       res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,
       'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Allow-Credentials': 'true'})
-      getUser(req, res)
+      const username = req.url.split('/')[3]
+      getUser(req, res, username)
     }
 
     // Create a user

@@ -81,21 +81,53 @@ class UI {
   }
 }
 
+// Events: preloader
+var page_preloader = document.getElementById("page")
+setTimeout(function() {
+  page_preloader.style.display = "none"
+}, 500)
+
 // Events: fetch API + display products
 document.addEventListener('DOMContentLoaded', (e) => {
-  if (e.target.URL == 'http://localhost:8080/admin_list.html') {
-    const url = 'http://localhost:5000/api/products'
-    UI.getGoods(url)
-  }
+  try {
+    const access_promise = new Promise ((resolve,reject) => {
+      const username = localStorage.getItem('username') || 'none'
+      resolve(username)
+    }).then((username) => {
+        const response = fetch(`http://localhost:5000/api/users/${username}`, {
+          method: 'GET',
+          credentials: 'include',
+          cache: 'no-cache',
+        }).then(response => response.json())
+        .then(data => {
+          if (data == 'Authorized') {
+            // on load logic
+            if (e.target.URL == 'http://localhost:8080/admin_list.html') {
+              const url = 'http://localhost:5000/api/products'
+              UI.getGoods(url)
+            }
 
-  else if (e.target.URL == 'http://localhost:8080/index.html' || 'http://localhost:8080') {
-    const url = 'http://localhost:5000/api/products_search/limit=20'
-    UI.getGoods(url)
-  }
+            else if (e.target.URL == 'http://localhost:8080/index.html' || 'http://localhost:8080') {
+              const url = 'http://localhost:5000/api/products_search/limit=20'
+              UI.getGoods(url)
+            }
 
-  else {
-    console.log('DOM without API request loaded')
-  }
+            else {
+              console.log('DOM without API request loaded')
+            }
+            // on load logic
+          } else if (data == 'Not Authorized') {
+              window.location.replace('http://localhost:8080/admin_login.html')
+              console.log('Not Authorized to view this page. Please, login!')
+          } else {
+            window.location.replace('http://localhost:8080/admin_login.html')
+            console.log('Something went wrong!')
+          }
+        }).catch(error => console.error(error))
+      })
+    } catch (error) {
+    console.error('Ошибка:', error)
+    }
 })
 
 // Event: click on logout button
@@ -106,15 +138,13 @@ document.querySelector('.sidebar').addEventListener('click', (e) => {
         const username = {username: localStorage.getItem('username')}
         resolve(username)
       }).then((username) => {
-        console.log(username)
         const response = fetch('http://localhost:5000/api/users', {
           method: 'DELETE',
           credentials: 'include',
-          headers: {'Content-Type': 'application/json'},
+          cache: 'no-cache',
           body: JSON.stringify(username)
         }).then(response => response.json())
         .then(data => {
-          console.log(response)
           if (data == 'User logged out!') {
             window.location.replace('http://localhost:8080/admin_login.html')
             localStorage.setItem('username', '')

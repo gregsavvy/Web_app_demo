@@ -57,12 +57,45 @@ class UI {
   }
 }
 
+// Events: preloader
+var page_preloader = document.getElementById("page")
+setTimeout(function() {
+  page_preloader.style.display = "none"
+}, 500)
+
 // Events: fetch API + display products
 document.addEventListener('DOMContentLoaded', (e) => {
-    const id = sessionStorage.getItem('id')
-    UI.getGoodUpdate(id)
-    document.querySelector('#delete-button').name = id
+  try {
+    const access_promise = new Promise ((resolve,reject) => {
+      const username = localStorage.getItem('username') || 'none'
+      resolve(username)
+    }).then((username) => {
+        const response = fetch(`http://localhost:5000/api/users/${username}`, {
+          method: 'GET',
+          credentials: 'include',
+          cache: 'no-cache',
+        }).then(response => response.json())
+        .then(data => {
+          if (data == 'Authorized') {
+            // on load logic
+            const id = sessionStorage.getItem('id')
+            UI.getGoodUpdate(id)
+            document.querySelector('#delete-button').name = id
+            // on load logic
+          } else if (data == 'Not Authorized') {
+              window.location.replace('http://localhost:8080/admin_login.html')
+              console.log('Not Authorized to view this page. Please, login!')
+          } else {
+            window.location.replace('http://localhost:8080/admin_login.html')
+            console.log('Something went wrong!')
+          }
+        }).catch(error => console.error(error))
+      })
+    } catch (error) {
+    console.error('Ошибка:', error)
+    }
 })
+
 
 // Event: Update a product
 document.querySelector('#product-form-update').addEventListener('submit', (e) => {
@@ -127,28 +160,30 @@ document.querySelector('#delete-button').addEventListener('click', (e) => {
 
 // Event: click on logout button
 document.querySelector('.sidebar').addEventListener('click', (e) => {
-  if (e.target.className == 'logout-button') {
+  if (e.target.parentElement.id == 'logout-button' || e.target.id == 'logout-button') {
     try {
-      const username = sessionStorage.getItem('username')
-      const response = fetch('http://localhost:5000/api/users', {
-        method: 'DELETE',
-        cache: 'no-cache',
-        credentials: 'include',
-        body: JSON.stringify(username)
-      }).then(response => response.json())
-      .then(data => {
-        if (data == 'User logged out!') {
-          window.location.replace('http://localhost:8080/admin_login.html')
-          sessionStorage.setItem('username', '')
-        } else {
-          console.log('Something went wrong')
-        }
+      const access_promise = new Promise ((resolve,reject) => {
+        const username = {username: localStorage.getItem('username')}
+        resolve(username)
+      }).then((username) => {
+        const response = fetch('http://localhost:5000/api/users', {
+          method: 'DELETE',
+          credentials: 'include',
+          cache: 'no-cache',
+          body: JSON.stringify(username)
+        }).then(response => response.json())
+        .then(data => {
+          if (data == 'User logged out!') {
+            window.location.replace('http://localhost:8080/admin_login.html')
+            localStorage.setItem('username', '')
+          } else {
+            console.log('Something went wrong')
+          }
+        })
+        .catch(error => console.error(error))
       })
-      .catch(error => console.error(error))
-
     } catch (error) {
       console.error('Ошибка:', error)
-      UI.showAlert('Something went wrong', 'danger')
     }
   }
 })

@@ -27,23 +27,26 @@ const domain = process.env.DOMAIN
 // end utility
 
 // 1 Gets a user and checks against a session cookie (cookie session token)
-async function getUser(req,res) {
+async function getUser(req,res, username) {
   try {
-  const body = await readyJSON(req)
-  const { username } = JSON.parse(body)
   const session = req.headers.cookie || 'SessionID Not authorized'
-  console.log(session.slice(10,13))
 
   fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
     if (err) throw err
-
     const users = JSON.parse(data)
-    const user = users.filter((user) => {
-      if (user.username == username && user.session == session.slice(10,13)) {
-        return res.write(JSON.stringify('Authorized'))
-      }
+    const access_toggle = 'Not Authorized'
+    const access_promise = new Promise((resolve,reject) => {
+      const user = users.filter((user) => {
+        if (user.username == username && user.session == session.slice(10,13)) {
+          const access_toggle = 'Authorized'
+          resolve(access_toggle)
+        }
+      })
+    resolve(access_toggle)
+  }).then((access_toggle) => {
+      res.write(JSON.stringify(access_toggle))
+      res.end()
     })
-    res.end()
     })
   }
   catch {
@@ -119,8 +122,7 @@ async function loginUser(req,res) {
       })
       const session_data = `${access_user}/${cookie_session}`
       resolve(session_data)
-    })
-      access_promise.then((session_data) => {
+    }).then((session_data) => {
         const access_user = session_data.split('/')[0]
         const cookie_session = session_data.split('/')[1]
         res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,

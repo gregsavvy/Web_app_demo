@@ -59,30 +59,6 @@ class UI {
     list.appendChild(row)
   }
 
-  //get a product for update page
-  static async getGoodUpdate(id) {
-      const response = await fetch(`http://localhost:5000/api/products/${id}`)
-      const StoredGood = await response.json()
-      UI.fillFormUpdate(StoredGood)
-  }
-
-  //fill form for update page
-  static async fillFormUpdate(good) {
-    const {param1, param2, param3, filename, date} = JSON.parse(JSON.stringify(good))
-    document.querySelector('#name').value = good.param1
-    document.querySelector('#description').value = good.param2
-    if (good.param3===true) {
-      document.querySelector('#customSwitch1').checked = true
-    }
-    else if (good.param3===false) {
-      document.querySelector('#customSwitch1').checked = false
-    }
-    else {
-      document.querySelector('#customSwitch1').checked = false
-    }
-    document.querySelector('#attachment').value = ''
-  }
-
   //alert
   static async showAlert(message, className) {
     const div = document.createElement('div')
@@ -105,21 +81,53 @@ class UI {
   }
 }
 
+// Events: preloader
+var page_preloader = document.getElementById("page")
+setTimeout(function() {
+  page_preloader.style.display = "none"
+}, 500)
+
 // Events: fetch API + display products
 document.addEventListener('DOMContentLoaded', (e) => {
-  if (e.target.URL == 'http://localhost:8080/admin_list.html') {
-    const url = 'http://localhost:5000/api/products'
-    UI.getGoods(url)
-  }
+  try {
+    const access_promise = new Promise ((resolve,reject) => {
+      const username = localStorage.getItem('username') || 'none'
+      resolve(username)
+    }).then((username) => {
+        const response = fetch(`http://localhost:5000/api/users/${username}`, {
+          method: 'GET',
+          credentials: 'include',
+          cache: 'no-cache',
+        }).then(response => response.json())
+        .then(data => {
+          if (data == 'Authorized') {
+            // on load logic
+            if (e.target.URL == 'http://localhost:8080/admin_list.html') {
+              const url = 'http://localhost:5000/api/products'
+              UI.getGoods(url)
+            }
 
-  else if (e.target.URL == 'http://localhost:8080/index.html' || 'http://localhost:8080') {
-    const url = 'http://localhost:5000/api/products_search/limit=20'
-    UI.getGoods(url)
-  }
+            else if (e.target.URL == 'http://localhost:8080/index.html' || 'http://localhost:8080') {
+              const url = 'http://localhost:5000/api/products_search/limit=20'
+              UI.getGoods(url)
+            }
 
-  else {
-    console.log('DOM without API request loaded')
-  }
+            else {
+              console.log('DOM without API request loaded')
+            }
+            // on load logic
+          } else if (data == 'Not Authorized') {
+              window.location.replace('http://localhost:8080/admin_login.html')
+              console.log('Not Authorized to view this page. Please, login!')
+          } else {
+            window.location.replace('http://localhost:8080/admin_login.html')
+            console.log('Something went wrong!')
+          }
+        }).catch(error => console.error(error))
+      })
+    } catch (error) {
+    console.error('Ошибка:', error)
+    }
 })
 
 // Event: click on change button
@@ -131,21 +139,20 @@ document.querySelector('#products-list').addEventListener('click', (e) => {
 
 // Event: click on logout button
 document.querySelector('.sidebar').addEventListener('click', (e) => {
+  console.log(e.target)
   if (e.target.parentElement.id == 'logout-button' || e.target.id == 'logout-button') {
     try {
       const access_promise = new Promise ((resolve,reject) => {
         const username = {username: localStorage.getItem('username')}
         resolve(username)
       }).then((username) => {
-        console.log(username)
         const response = fetch('http://localhost:5000/api/users', {
           method: 'DELETE',
           credentials: 'include',
-          headers: {'Content-Type': 'application/json'},
+          cache: 'no-cache',
           body: JSON.stringify(username)
         }).then(response => response.json())
         .then(data => {
-          console.log(response)
           if (data == 'User logged out!') {
             window.location.replace('http://localhost:8080/admin_login.html')
             localStorage.setItem('username', '')
