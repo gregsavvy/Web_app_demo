@@ -131,7 +131,7 @@ document.querySelector('#product-form-update').addEventListener('submit', (e) =>
     formData.append('file', files)
 
     try {
-      const response = fetch(`${domain_backend}/api/products/${id}`, {
+      const response = fetch(`${domain_back}/api/products/${id}`, {
         method: 'PUT',
         body: formData
       })
@@ -151,7 +151,7 @@ document.querySelector('#delete-button').addEventListener('click', (e) => {
   const id = sessionStorage.getItem('id')
 
   try {
-  const response = fetch(`${domain_backend}/api/products/${id}`, {
+  const response = fetch(`${domain_back}/api/products/${id}`, {
       method: 'DELETE'
     })
     // Show success message
@@ -169,7 +169,7 @@ document.querySelector('.sidebar').addEventListener('click', (e) => {
         const username = {username: localStorage.getItem('username')}
         resolve(username)
       }).then((username) => {
-        const response = fetch(`${domain_backend}/api/users`, {
+        const response = fetch(`${domain_back}/api/users`, {
           method: 'DELETE',
           credentials: 'include',
           cache: 'no-cache',
@@ -177,7 +177,7 @@ document.querySelector('.sidebar').addEventListener('click', (e) => {
         }).then(response => response.json())
         .then(data => {
           if (data == 'User logged out!') {
-            window.location.replace(`${domain_frontend}/admin_login.html`)
+            window.location.replace(`${domain_front}/admin_login.html`)
             localStorage.setItem('username', '')
           } else {
             console.log('Something went wrong')

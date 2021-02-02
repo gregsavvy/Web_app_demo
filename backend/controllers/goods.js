@@ -49,9 +49,9 @@ async function createProduct(req,res) {
     var busboy = new Busboy({ headers: req.headers })
     let body = {}
        busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-         var saveTo = path.resolve('../', './backend/src/img/', path.basename(filename))
+         var saveTo = path.resolve('./backend/src/img/', path.basename(`${filename}_${Date.now()}`))
          file.pipe(fs.createWriteStream(saveTo))
-         body['filename'] = filename
+         body['filename'] = `${filename}_${Date.now()}`
        })
        busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
          body[fieldname] = val
@@ -79,9 +79,9 @@ async function updateProduct(req, res, id) {
   var busboy = new Busboy({ headers: req.headers })
   let body = {}
      busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-       var saveTo = path.resolve('../', './backend/src/img/', path.basename(filename))
+       var saveTo = path.resolve('./backend/src/img/', path.basename(`${filename}_${Date.now()}`))
        file.pipe(fs.createWriteStream(saveTo))
-       body['filename'] = filename
+       body['filename'] = `${filename}_${Date.now()}`
      })
      busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
        body[fieldname] = val
