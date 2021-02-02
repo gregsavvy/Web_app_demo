@@ -1,3 +1,6 @@
+const domain_back = 'http://localhost:5000'
+const domain_front = 'http://localhost:8080'
+
 // Product class: product object
 class Good {
   constructor(param1, param2, param3, filename, date) {
@@ -13,7 +16,7 @@ class Good {
 class UI {
   //get a product for update page
   static async getGoodUpdate(id) {
-      const response = await fetch(`http://localhost:5000/api/products/${id}`)
+      const response = await fetch(`${domain_back}/api/products/${id}`)
       const StoredGood = await response.json()
       UI.fillFormUpdate(StoredGood)
   }
@@ -70,7 +73,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
       const username = localStorage.getItem('username') || 'none'
       resolve(username)
     }).then((username) => {
-        const response = fetch(`http://localhost:5000/api/users/${username}`, {
+        const response = fetch(`${domain_back}/api/users/${username}`, {
           method: 'GET',
           credentials: 'include',
           cache: 'no-cache',
@@ -83,10 +86,10 @@ document.addEventListener('DOMContentLoaded', (e) => {
             document.querySelector('#delete-button').name = id
             // on load logic
           } else if (data == 'Not Authorized') {
-              window.location.replace('http://localhost:8080/admin_login.html')
+              window.location.replace(`${domain_front}/admin_login.html`)
               console.log('Not Authorized to view this page. Please, login!')
           } else {
-            window.location.replace('http://localhost:8080/admin_login.html')
+            window.location.replace(`${domain_front}/admin_login.html`)
             console.log('Something went wrong!')
           }
         }).catch(error => console.error(error))
@@ -128,7 +131,7 @@ document.querySelector('#product-form-update').addEventListener('submit', (e) =>
     formData.append('file', files)
 
     try {
-      const response = fetch(`http://localhost:5000/api/products/${id}`, {
+      const response = fetch(`${domain_backend}/api/products/${id}`, {
         method: 'PUT',
         body: formData
       })
@@ -148,7 +151,7 @@ document.querySelector('#delete-button').addEventListener('click', (e) => {
   const id = sessionStorage.getItem('id')
 
   try {
-  const response = fetch(`http://localhost:5000/api/products/${id}`, {
+  const response = fetch(`${domain_backend}/api/products/${id}`, {
       method: 'DELETE'
     })
     // Show success message
@@ -166,7 +169,7 @@ document.querySelector('.sidebar').addEventListener('click', (e) => {
         const username = {username: localStorage.getItem('username')}
         resolve(username)
       }).then((username) => {
-        const response = fetch('http://localhost:5000/api/users', {
+        const response = fetch(`${domain_backend}/api/users`, {
           method: 'DELETE',
           credentials: 'include',
           cache: 'no-cache',
@@ -174,7 +177,7 @@ document.querySelector('.sidebar').addEventListener('click', (e) => {
         }).then(response => response.json())
         .then(data => {
           if (data == 'User logged out!') {
-            window.location.replace('http://localhost:8080/admin_login.html')
+            window.location.replace(`${domain_frontend}/admin_login.html`)
             localStorage.setItem('username', '')
           } else {
             console.log('Something went wrong')

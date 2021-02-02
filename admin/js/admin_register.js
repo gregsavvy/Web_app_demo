@@ -1,3 +1,6 @@
+const domain_back = 'http://localhost:5000'
+const domain_front = 'http://localhost:8080'
+
 // User class: user object
 class User {
   constructor(username, email, password, date, session) {
@@ -58,7 +61,7 @@ document.querySelector('#registration-form').addEventListener('submit', (e) => {
     UI.showAlert('Passwords not matching', 'danger')
   } else {
     try {
-      const response = fetch('http://localhost:5000/api/users', {
+      const response = fetch(`${domain_back}/api/users`, {
         method: 'POST',
         cache: 'no-cache',
         body: JSON.stringify(data)

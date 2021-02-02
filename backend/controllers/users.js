@@ -2,9 +2,9 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 
-require('dotenv').config()
+require('dotenv').config({path: path.resolve(__dirname,'../','./.env')})
 
-const domain = process.env.DOMAIN
+const domain = process.env.DOMAINFRONT
 
 // forming JSON body - utility function for JSON parsing
   function readyJSON(req) {
@@ -31,7 +31,7 @@ async function getUser(req,res, username) {
   try {
   const session = req.headers.cookie || 'SessionID Not authorized'
 
-  fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
+  fs.readFile(path.resolve('./backend/models/users.json'), 'utf8', function (err, data) {
     if (err) throw err
     const users = JSON.parse(data)
     const access_toggle = 'Not Authorized'
@@ -49,14 +49,14 @@ async function getUser(req,res, username) {
     })
     })
   }
-  catch {
+  catch (error) {
     console.log(error)
   }
 }
 
 // 2 Gets all users
 async function getUsers(req,res) {
-  fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
+  fs.readFile(path.resolve('./backend/models/users.json'), 'utf8', function (err, data) {
     if (err) throw err
 
     const users = JSON.parse(data)
@@ -78,7 +78,7 @@ async function createUser(req, res) {
             date
         }
 
-        fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
+        fs.readFile(path.resolve('./backend/models/users.json'), 'utf8', function (err, data) {
           if (err) throw err
           const users = JSON.parse(data)
           const usersExist = users.filter(user => user.username == newUser.username || user.email == newUser.email)
@@ -87,7 +87,7 @@ async function createUser(req, res) {
             res.end(JSON.stringify('User already exists!'))
           } else {
             users.push(newUser)
-            fs.writeFile(path.resolve('./', './models/users.json'), JSON.stringify(users), 'utf8', function (err) {
+            fs.writeFile(path.resolve('./backend/models/users.json'), JSON.stringify(users), 'utf8', function (err) {
               if (err) throw err
               })
               res.end(JSON.stringify('Done!'))
@@ -104,7 +104,7 @@ async function loginUser(req,res) {
     const body = await readyJSON(req)
     const { username, password } = JSON.parse(body)
 
-    fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
+    fs.readFile(path.resolve('./backend/models/users.json'), 'utf8', function (err, data) {
       if (err) throw err
       const users = JSON.parse(data)
 
@@ -135,7 +135,7 @@ async function loginUser(req,res) {
         res.end()
       })
 
-      fs.writeFile(path.resolve('./', './models/users.json'), JSON.stringify(users), 'utf8', function (err) {
+      fs.writeFile(path.resolve('./backend/models/users.json'), JSON.stringify(users), 'utf8', function (err) {
         if (err) throw err
         })
       })
@@ -150,7 +150,7 @@ async function logoutUser(req,res) {
   const body = await readyJSON(req)
   const { username } = JSON.parse(body)
 
-  fs.readFile(path.resolve('./', './models/users.json'), 'utf8', function (err, data) {
+  fs.readFile(path.resolve('./backend/models/users.json'), 'utf8', function (err, data) {
     if (err) throw err
 
     const users = JSON.parse(data)
@@ -166,7 +166,7 @@ async function logoutUser(req,res) {
         res.end(JSON.stringify('User logged out!'))
       }
     })
-    fs.writeFile(path.resolve('./', './models/users.json'), JSON.stringify(users), 'utf8', function (err) {
+    fs.writeFile(path.resolve('./backend/models/users.json'), JSON.stringify(users), 'utf8', function (err) {
       if (err) throw err
       })
     })

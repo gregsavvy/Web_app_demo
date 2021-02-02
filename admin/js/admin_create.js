@@ -1,3 +1,6 @@
+const domain_back = 'http://localhost:5000'
+const domain_front = 'http://localhost:8080'
+
 // Product class: product object
 class Good {
   constructor(param1, param2, param3, filename, date) {
@@ -46,7 +49,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
       const username = localStorage.getItem('username') || 'none'
       resolve(username)
     }).then((username) => {
-        const response = fetch(`http://localhost:5000/api/users/${username}`, {
+        const response = fetch(`${domain_back}/api/users/${username}`, {
           method: 'GET',
           credentials: 'include',
           cache: 'no-cache',
@@ -57,10 +60,10 @@ document.addEventListener('DOMContentLoaded', (e) => {
             console.log('DOM without API request loaded')
             // on load logic
           } else if (data == 'Not Authorized') {
-              window.location.replace('http://localhost:8080/admin_login.html')
+              window.location.replace(`${domain_front}/admin_login.html`)
               console.log('Not Authorized to view this page. Please, login!')
           } else {
-            window.location.replace('http://localhost:8080/admin_login.html')
+            window.location.replace(`${domain_front}/admin_login.html`)
             console.log('Something went wrong!')
           }
         }).catch(error => console.error(error))
@@ -100,7 +103,7 @@ document.querySelector('#product-form').addEventListener('submit', (e) => {
     formData.append('file', files)
 
     try {
-      const response = fetch('http://localhost:5000/api/products', {
+      const response = fetch(`${domain_back}/api/products`, {
         method: 'POST',
         body: formData
       })
@@ -125,7 +128,7 @@ document.querySelector('.sidebar').addEventListener('click', (e) => {
         const username = {username: localStorage.getItem('username')}
         resolve(username)
       }).then((username) => {
-        const response = fetch('http://localhost:5000/api/users', {
+        const response = fetch(`${domain_back}/api/users`, {
           method: 'DELETE',
           credentials: 'include',
           cache: 'no-cache',
@@ -133,7 +136,7 @@ document.querySelector('.sidebar').addEventListener('click', (e) => {
         }).then(response => response.json())
         .then(data => {
           if (data == 'User logged out!') {
-            window.location.replace('http://localhost:8080/admin_login.html')
+            window.location.replace(`${domain_front}/admin_login.html`)
             localStorage.setItem('username', '')
           } else {
             console.log('Something went wrong')

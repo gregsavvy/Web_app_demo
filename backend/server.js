@@ -7,17 +7,19 @@ const mongoose = require('mongoose')
 const { getProducts, getProduct, createProduct, updateProduct, deleteProduct, searchProduct, getProductsLimit } = require('./controllers/goods')
 const { getUser, getUsers, createUser, loginUser, logoutUser } = require('./controllers/users')
 
-require('dotenv').config()
+require('dotenv').config({path: path.resolve(__dirname+'/.env')})
 
-const domain = process.env.DOMAIN
+const domain = process.env.DOMAINFRONT
 
 // Product database connection
 const uri = process.env.ATLAS_URI
-mongoose.connect(`${uri}`, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
-const productConnection = mongoose.connection
-productConnection.once('open', () => {
-  console.log('MongoDB Atlas connection established')
-})
+mongoose.connect(`${uri}`, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true },
+  () => {
+    console.log("Connected to MongoDB Atlas"
+  )},
+  (err) => {
+    console.log("Unable to connect to MongoDB. Error: " + err)
+  })
 
 // server routes
 const server = http.createServer((req, res) => {

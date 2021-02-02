@@ -1,3 +1,6 @@
+const domain_back = 'http://localhost:5000'
+const domain_front = 'http://localhost:8080'
+
 // User class: user object
 class User {
   constructor(username, email, password, date, session) {
@@ -45,7 +48,7 @@ document.querySelector('#login-form').addEventListener('submit', (e) => {
     UI.showAlert('Please fill in all fields', 'danger')
   } else {
     try {
-      const response = fetch('http://localhost:5000/api/users', {
+      const response = fetch(`${domain_back}/api/users`, {
         method: 'PUT',
         cache: 'no-cache',
         credentials: 'include',
@@ -56,7 +59,7 @@ document.querySelector('#login-form').addEventListener('submit', (e) => {
           UI.showAlert('Incorrect login or password', 'danger')
         } else if (data == username) {
           localStorage.setItem('username', username)
-          window.location.replace('http://localhost:8080')
+          window.location.replace(`${domain_front}`)
         } else {
           UI.showAlert('Something went wrong', 'danger')
         }

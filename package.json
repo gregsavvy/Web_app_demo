@@ -4,12 +4,24 @@
   "private": true,
   "dependencies": {
     "busboy": "^0.2.14",
+    "concurrently": "^5.3.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.10.13"
+    "mongoose": "^5.10.13",
+    "file-loader": "^6.1.1",
+    "url-loader": "^4.1.1"
+  },
+  "dependenciesComments": {
+    "busboy": "Used for fileserver",
+    "concurrently": "Used for npm start command of two separate node servers",
+    "dotenv": "configures process.env variables",
+    "express": "ONLY used for serving static content on frontend admin",
+    "mongoose": "Used for mongodb atlas"
   },
   "scripts": {
-    "start": "node ./backend/server.js & node ./admin/test_server/frontserver.js && fg"
+    "backend": "node ./backend/server.js",
+    "frontend": "node ./admin/test_server/frontserver.js",
+    "start": "concurrently \"npm run backend\" \"npm run frontend\""
   },
   "eslintConfig": {
     "extends": []
@@ -27,7 +39,5 @@
     ]
   },
   "devDependencies": {
-    "file-loader": "^6.1.1",
-    "url-loader": "^4.1.1"
   }
 }

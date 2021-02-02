@@ -1,3 +1,6 @@
+const domain_back = 'http://localhost:5000'
+const domain_front = 'http://localhost:8080'
+
 // Events: preloader
 var page_preloader = document.getElementById("page")
 setTimeout(function() {
@@ -13,7 +16,7 @@ document.querySelector('.sidebar').addEventListener('click', (e) => {
         const username = {username: localStorage.getItem('username')}
         resolve(username)
       }).then((username) => {
-        const response = fetch('http://localhost:5000/api/users', {
+        const response = fetch(`${domain_back}/api/users`, {
           method: 'DELETE',
           credentials: 'include',
           cache: 'no-cache',
@@ -21,7 +24,7 @@ document.querySelector('.sidebar').addEventListener('click', (e) => {
         }).then(response => response.json())
         .then(data => {
           if (data == 'User logged out!') {
-            window.location.replace('http://localhost:8080/admin_login.html')
+            window.location.replace(`${domain_front}/admin_login.html`)
             localStorage.setItem('username', '')
           } else {
             console.log('Something went wrong')
