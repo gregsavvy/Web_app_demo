@@ -1,5 +1,5 @@
 const domain_back = 'http://localhost:5000'
-const domain_front = 'http://localhost:8080'
+const domain_front = 'http://localhost:8081'
 
 // User class: user object
 class User {

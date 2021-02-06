@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@vue/cli": "^4.5.11",
     "busboy": "^0.2.14",
     "concurrently": "^5.3.0",
     "dotenv": "^8.2.0",
@@ -10,6 +11,7 @@
     "mongoose": "^5.10.13"
   },
   "dependenciesComments": {
+    "@vue/cli": "Used on frontend client, NOT on frontend admin",
     "busboy": "Used for fileserver",
     "concurrently": "Used for npm start command of two separate node servers",
     "dotenv": "configures process.env variables",
@@ -35,6 +37,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {}
+  }
 }

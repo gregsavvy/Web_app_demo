@@ -1,5 +1,5 @@
 const domain_back = 'http://localhost:5000'
-const domain_front = 'http://localhost:8080'
+const domain_front = 'http://localhost:8081'
 
 // Product class: product object
 class Good {
@@ -115,7 +115,7 @@ document.querySelector('#product-form-update').addEventListener('submit', (e) =>
   const date = Date.now()
 
   // Validate
-  if(param1 === '' || param2 === '' || filename == '') {
+  if(param1 === '' || param2 === '') {
     UI.showAlert('Please fill in all fields', 'danger')
   } else {
     // Instatiate product
