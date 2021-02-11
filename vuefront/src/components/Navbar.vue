@@ -1,4 +1,5 @@
 <template>
+
       <nav>
             <input type="checkbox" id="nav" class="hidden">
             <label for="nav" class="nav-btn">
@@ -11,13 +12,13 @@
             </div>
             <div class="nav-wrapper">
                   <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Overview</a></li>
-                        <li><a href="#">Prices</a></li>
-                        <li><a href="#">Purchase</a></li>
+                        <li><a href="#">Products</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contacts</a></li>
                   </ul>
             </div>
       </nav>
+
 </template>
 
 <script>

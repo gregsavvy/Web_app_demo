@@ -1,17 +1,15 @@
 <template>
-  <div id="app">
-
-    <router-view/>
-
+  <div>
+  Shopping Cart Logo
   </div>
 </template>
 
 <script>
-
 export default {
-  name: "App"}
+  name: "CartNav",
+}
 </script>
 
-<style>
+<style scoped>
 
 </style>

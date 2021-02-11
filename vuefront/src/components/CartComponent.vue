@@ -1,17 +1,15 @@
 <template>
-  <div id="app">
-
-    <router-view/>
-
+  <div>
+  Shopping Cart
   </div>
 </template>
 
 <script>
-
 export default {
-  name: "App"}
+  name: "CartComponent",
+}
 </script>
 
-<style>
+<style scoped>
 
 </style>

@@ -1,17 +1,16 @@
 <template>
-  <div>
     <div class="products">
+      
       <div
         v-for="product in allProducts"
-        :key="product.id"
+        :key="product._id"
         class="product"
       >
         {{ product.param1 }}
       </div>
     </div>
-  </div>
 </template>
-
+exit
 <script>
 import { mapGetters, mapActions } from "vuex"
 export default {
