@@ -202,7 +202,7 @@ nav ul li a {
 
 #nav:checked ~ .nav-wrapper ul li a {
       opacity: 1;
-      transform: translateX(0);
+      transform: translateX(-50px);
 }
 
 .hidden {

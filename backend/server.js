@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 
 const { getProducts, getProduct, createProduct, updateProduct, deleteProduct, searchProduct, getProductsLimit } = require('./controllers/goods')
 const { getUser, getUsers, createUser, loginUser, logoutUser } = require('./controllers/users')
+const { getIMG } = require('./controllers/img')
 
 require('dotenv').config({path: path.resolve(__dirname+'/.env')})
 
@@ -77,6 +78,15 @@ const server = http.createServer((req, res) => {
       'Access-Control-Allow-Headers': 'Content-Type'})
       const limit = req.url.split('/')[3].slice(6) || 20
       getProductsLimit(req, res, limit)
+    }
+
+    // IMG API FOR PRODUCTS
+    else if(req.url.match(/\/api\/products_img\/\w+/) && req.method === 'GET') {
+      res.writeHead(200, {'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'})
+      const img = req.url.split('/')[3]
+      getIMG(req, res, img)
     }
 
     // USERS API, JSON file //

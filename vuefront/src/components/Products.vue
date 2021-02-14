@@ -1,22 +1,33 @@
 <template>
     <div class="products">
-      
-      <div
-        v-for="product in allProducts"
-        :key="product._id"
-        class="product"
+
+      <div v-for="product in allProducts"
+      :key="product._id"
+      class="card"
       >
-        {{ product.param1 }}
+       <img :src="getIMG(product.filename)" style="width:100%">
+
+       <div class="container-card">
+         <h4><b>{{ product.param1 }}</b></h4>
+         <p>{{ product.param2 }}</p>
+       </div>
       </div>
+
     </div>
 </template>
-exit
+
 <script>
 import { mapGetters, mapActions } from "vuex"
+
 export default {
   name: "Products",
   methods: {
-    ...mapActions(["fetchProducts"])
+    ...mapActions(["fetchProducts"]),
+    getIMG: function getIMG(filename) {
+      var domain_back = 'http://localhost:5000/api/products_img/'
+      var src = `${domain_back}${filename}`
+      return src
+    }
   },
   computed: mapGetters(["allProducts"]),
   created() {
@@ -32,14 +43,20 @@ export default {
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1rem;
 }
-.product {
-  border: 1px solid #ccc;
-  background: #41b883;
-  padding: 1rem;
-  border-radius: 5px;
-  text-align: center;
-  position: relative;
-  cursor: pointer;
+.card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.container-card {
+  padding: 2px 16px;
 }
 
 @media (max-width: 500px) {
