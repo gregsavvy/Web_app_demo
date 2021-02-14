@@ -2,16 +2,18 @@ const domain_back = 'http://localhost:5000'
 // const domain_front = 'http://localhost:8080'
 
 const state = {
-  products: []
+  products: [],
+  product: {}
 }
 
 const getters = {
-  allProducts: state => state.products
+  allProducts: state => state.products,
+  oneProduct: state => state.product
 }
 
 const actions = {
   async fetchProducts({ commit }) {
-// eslint-disable-next-line no-unused-vars
+    /*eslint-disable no-unused-vars*/
     const response = await fetch(
       `${domain_back}/api/products`
     )
@@ -20,24 +22,24 @@ const actions = {
       commit('setProducts', data)
     })
     .catch(error => console.log(error))
-  }
+  },
 
-  // async filterProducts({ commit }, e) {
-  //   // Get selected number
-  //   const limit = parseInt(
-  //     e.target.options[e.target.options.selectedIndex].innerText
-  //   );
-  //
-  //   const response = await axios.get(
-  //     `https://jsonplaceholder.typicode.com/todos?_limit=${limit}`
-  //   );
-  //
-  //   commit('setProducts', response.data);
-  // }
+  async fetchProduct({ commit }, id) {
+    /*eslint-disable no-unused-vars*/
+    const response = await fetch(
+      `${domain_back}/api/products/`+id
+    )
+    .then(response => response.json())
+    .then(data => {
+      commit('setProduct', data)
+    })
+    .catch(error => console.log(error))
+    }
 }
 
 const mutations = {
-  setProducts: (state, products) => {state.products = products}
+  setProducts: (state, products) => {state.products = products},
+  setProduct: (state, product) => {state.product = product}
 }
 
 export default {

@@ -55,7 +55,6 @@ body {
 .container {
   max-width: 1100px;
   margin: auto;
-  overflow: auto;
-  padding: 0 2rem;
+  padding: 0 3rem;
 }
 </style>

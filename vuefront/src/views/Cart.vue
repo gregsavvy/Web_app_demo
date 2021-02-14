@@ -8,7 +8,7 @@
       <CartNav/>
     </div>
 
-    <div class="container">
+    <div class="container-main">
       <CartComponent/>
     </div>
   </div>
@@ -16,15 +16,16 @@
 
 <script>
 import Navbar from "../components/Navbar.vue"
-import CartComponent from "../components/CartComponent.vue"
 import CartNav from "../components/CartNav.vue"
+import CartComponent from "../components/CartComponent.vue"
+
 
 export default {
   name: "Cart",
   components: {
     Navbar,
-    CartComponent,
-    CartNav
+    CartNav,
+    CartComponent
   }
 }
 </script>
@@ -55,7 +56,15 @@ body {
 .container {
   max-width: 1100px;
   margin: auto;
-  overflow: auto;
   padding: 0 2rem;
 }
+
+.container-main {
+  max-width: 1100px;
+  margin: auto;
+  padding: 0 4rem;
+  display: flex;
+  width: 100%;
+}
+
 </style>

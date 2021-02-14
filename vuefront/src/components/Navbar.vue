@@ -8,13 +8,13 @@
                   <i></i>
             </label>
             <div class="logo">
-                  <a href="#">BRAND</a>
+                  <a href="/">Web App Demo</a>
             </div>
             <div class="nav-wrapper">
                   <ul>
-                        <li><a href="#">Products</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Contacts</a></li>
+                        <li><a href="/">Products</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/contacts">Contacts</a></li>
                   </ul>
             </div>
       </nav>
@@ -30,6 +30,7 @@ export default {
 <style scoped>
 nav {
       padding: 8px;
+      overflow: auto;
 }
 
 .logo {

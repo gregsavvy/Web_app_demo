@@ -1,58 +1,41 @@
 <template>
-    <div class="products">
 
-      <div v-for="product in allProducts"
-      :key="product._id"
-      class="card"
-      >
-       <img :src="getIMG(product.filename)" style="width:100%">
-
+      <div class="card">
+       <img :src="getIMG(oneProduct.filename)" style="width:100%">
        <div class="container-card">
-         <h4><b>{{ product.param1 }}</b></h4>
-         <p>{{ product.param2 }}</p>
-         <router-link :to="{ name: 'Product', params: { id: product._id } }">View</router-link>
+         <h4><b>{{ oneProduct.param1 }}</b></h4>
+         <p>{{ oneProduct.param2 }}</p>
        </div>
       </div>
 
-    </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex"
 
 export default {
-  name: "Products",
+  name: "ProductComponent",
   methods: {
-    ...mapActions(["fetchProducts"]),
+    ...mapActions(["fetchProduct"]),
     getIMG: function getIMG(filename) {
       var domain_back = 'http://localhost:5000/api/products_img/'
       var src = `${domain_back}${filename}`
       return src
     }
   },
-  computed: mapGetters(["allProducts"]),
+  computed: mapGetters(["oneProduct"]),
   created() {
-    this.fetchProducts()
+    this.fetchProduct(this.$route.params.id)
   }
 }
 </script>
 
 <style scoped>
-.products {
-  margin-top: 50px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 1rem;
-}
+
 .card {
   /* Add shadows to create the "card" effect */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
-  border-radius: 5px;
-}
-
-img {
-  border-radius: 5px 5px 0 0;
 }
 
 /* On mouse-over, add a deeper shadow */

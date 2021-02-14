@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="cart">
     <div class="container">
       <Navbar/>
     </div>
@@ -8,8 +8,8 @@
       <CartNav/>
     </div>
 
-    <div class="container-main">
-      About Page
+    <div class="container">
+      <ProductComponent/>
     </div>
   </div>
 </template>
@@ -17,12 +17,14 @@
 <script>
 import Navbar from "../components/Navbar.vue"
 import CartNav from "../components/CartNav.vue"
+import ProductComponent from "../components/ProductComponent.vue"
 
 export default {
-  name: "About",
+  name: "Product",
   components: {
     Navbar,
-    CartNav
+    CartNav,
+    ProductComponent
   }
 }
 </script>
@@ -55,13 +57,4 @@ body {
   margin: auto;
   padding: 0 2rem;
 }
-
-.container-main {
-  max-width: 1100px;
-  margin: auto;
-  padding: 0 4rem;
-  display: flex;
-  width: 100%;
-}
-
 </style>

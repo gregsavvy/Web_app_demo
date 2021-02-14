@@ -9,7 +9,7 @@
     </div>
 
     <div class="container-main">
-      About Page
+      Contact Page
     </div>
   </div>
 </template>
@@ -63,5 +63,4 @@ body {
   display: flex;
   width: 100%;
 }
-
 </style>
