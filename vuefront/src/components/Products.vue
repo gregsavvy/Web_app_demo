@@ -11,6 +11,9 @@
          <h4><b>{{ product.param1 }}</b></h4>
          <p>{{ product.param2 }}</p>
          <router-link :to="{ name: 'Product', params: { id: product._id } }">View</router-link>
+         <button @click="addToCart(product)">
+         Add to cart
+         </button>
        </div>
       </div>
 
@@ -23,7 +26,7 @@ import { mapGetters, mapActions } from "vuex"
 export default {
   name: "Products",
   methods: {
-    ...mapActions(["fetchProducts"]),
+    ...mapActions(["fetchProducts", 'addToCart']),
     getIMG: function getIMG(filename) {
       var domain_back = 'http://localhost:5000/api/products_img/'
       var src = `${domain_back}${filename}`
