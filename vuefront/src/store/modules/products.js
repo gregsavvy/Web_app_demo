@@ -72,6 +72,7 @@ const actions = {
   },
   checkout ({commit, state}, products) {
     commit('setCart', [])
+  }
 }
 
 const mutations = {
