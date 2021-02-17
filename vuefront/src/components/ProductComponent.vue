@@ -5,7 +5,7 @@
        <div class="container-card">
          <h4><b>{{ oneProduct.param1 }}</b></h4>
          <p>{{ oneProduct.param2 }}</p>
-         <button @click="addToCart(product)">
+         <button @click="addToCart(oneProduct)">
          Add to cart
          </button>
        </div>
@@ -19,7 +19,7 @@ import { mapGetters, mapActions } from "vuex"
 export default {
   name: "ProductComponent",
   methods: {
-    ...mapActions(["fetchProducts", 'addToCart']),
+    ...mapActions(["fetchProduct", 'addToCart']),
     getIMG: function getIMG(filename) {
       var domain_back = 'http://localhost:5000/api/products_img/'
       var src = `${domain_back}${filename}`
