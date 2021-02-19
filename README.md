@@ -3,8 +3,8 @@ About this app:
 This is a Web app demo which consists of 3 separate modules:
 
 1. NODE.js (without Express) | RestAPI Backend | ex. localhost:5000/api/products
-2. Vanilla JS | Admin frontend | ex. localhost:8080
-3. VUE.js | Client frontend | ex. localhost:8081 (in development)
+2. Vanilla JS | Admin frontend | ex. localhost:8081
+3. VUE.js | Client frontend | ex. localhost:8080
 
 Scope creep consideration for the demo:
 

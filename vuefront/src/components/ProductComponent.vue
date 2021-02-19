@@ -1,7 +1,7 @@
 <template>
 
       <div class="card">
-       <img :src="getIMG(oneProduct.filename)" style="width:100%">
+       <img :src="getIMG(oneProduct.filename)" style="max-width:60%">
        <div class="container-card">
          <h4><b>{{ oneProduct.param1 }}</b></h4>
          <p>{{ oneProduct.param2 }}</p>
@@ -39,6 +39,9 @@ export default {
   /* Add shadows to create the "card" effect */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
+  margin-top: 45px;
+  display:flex;
+  min-width: 500px;
 }
 
 /* On mouse-over, add a deeper shadow */
@@ -48,7 +51,8 @@ export default {
 
 /* Add some padding inside the card container */
 .container-card {
-  padding: 2px 16px;
+  max-width:40%;
+  padding: 5px 16px;
 }
 
 @media (max-width: 500px) {

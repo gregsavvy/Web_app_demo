@@ -9,7 +9,14 @@
     </div>
 
     <div class="container-main">
-      Contact Page
+      <h2>Contacts</h2>
+        <p>If you have any questions please contact me:</p>
+        <img width="25px" height="25px" src="../assets/icons/gmail.png">
+          <a href="mailto:gregsavvy@gmail.com">gregsavvy@gmail.com</a>
+        <br>
+        <br>
+        <img width="25px" height="25px" src="../assets/icons/telegram.png">
+          <a href="https://telegram.me/Gregory_Savitsky">t.me/Gregory_Savitsky</a>
     </div>
   </div>
 </template>
@@ -57,10 +64,9 @@ body {
 }
 
 .container-main {
-  max-width: 720px;
+  margin-top: 70px;
+  max-width: 1100px;
   margin: auto;
-  padding: 0 4rem;
-  display: flex;
-  width: 100%;
+  padding: 2rem 4rem;
 }
 </style>
