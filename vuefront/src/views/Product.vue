@@ -8,7 +8,7 @@
       <CartNav/>
     </div>
 
-    <div class="container">
+    <div class="container-main">
       <ProductComponent/>
     </div>
   </div>
@@ -45,8 +45,8 @@ body {
       margin: 0;
       padding: 0;
       width: 100%;
-      height: 100vh;
-      font-family: Poppins;
+      height: 100%;
+      font-family: Tahoma, Verdana;
       font-weight: 400;
       background-position: center;
       background-size: cover;
@@ -56,5 +56,12 @@ body {
   max-width: 1100px;
   margin: auto;
   padding: 0 2rem;
+}
+
+.container-main {
+  margin-top: 70px;
+  max-width: 1100px;
+  margin: auto;
+  padding: 2rem 4rem;
 }
 </style>

@@ -47,7 +47,7 @@ body {
       padding: 0;
       width: 100%;
       height: 100vh;
-      font-family: Poppins;
+      font-family: Tahoma, Verdana;
       font-weight: 400;
       background-position: center;
       background-size: cover;

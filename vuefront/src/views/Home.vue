@@ -1,5 +1,5 @@
 <template>
-  <div>
+    <div>
     <div class="container">
       <Navbar/>
     </div>
@@ -8,7 +8,7 @@
       <CartNav/>
     </div>
 
-    <div class="container">
+    <div class="container-main">
       <Products/>
     </div>
   </div>
@@ -46,7 +46,7 @@ body {
       padding: 0;
       width: 100%;
       height: 100vh;
-      font-family: Poppins;
+      font-family: Tahoma, Verdana;
       font-weight: 400;
       background-position: center;
       background-size: cover;
@@ -55,6 +55,13 @@ body {
 .container {
   max-width: 1100px;
   margin: auto;
-  padding: 0 3rem;
+  padding: 0 2rem;
+}
+
+.container-main {
+  margin-top: 70px;
+  max-width: 1100px;
+  margin: auto;
+  padding: 2rem 4rem;
 }
 </style>

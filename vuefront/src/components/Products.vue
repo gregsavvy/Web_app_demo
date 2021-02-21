@@ -8,13 +8,18 @@
        <img :src="getIMG(product.filename)" style="width:100%">
 
        <div class="container-card">
-         <h4><b>{{ product.param1 }}</b></h4>
+         <span :class="`${product.param3}`">{{ product.param3 }}</span>
+         <span><b>{{ product.param1 }}</b></span>
          <p>{{ product.param2 }}</p>
-         <router-link :to="{ name: 'Product', params: { id: product._id } }">View</router-link>
-         <button @click="addToCart(product)">
+
+      </div>
+
+      <div class="buttons-card">
+         <router-link class="view-btn" :to="{ name: 'Product', params: { id: product._id } }">View</router-link>
+         <button class="add-btn" @click="addToCart(product)">
          Add to cart
          </button>
-       </div>
+      </div>
       </div>
 
     </div>
@@ -42,16 +47,97 @@ export default {
 
 <style scoped>
 .products {
-  margin-top: 50px;
+  flex:auto;
+  float:right;
+  margin-top: 10px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1rem;
 }
+
 .card {
   /* Add shadows to create the "card" effect */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   border-radius: 5px;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  background-color: white;
+}
+
+.true {
+  background-color: #2ecc71;
+  margin-bottom: 5px;
+  margin-top: 2px;
+  padding: 3px 7px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+  color: white;
+  border-radius: 4px;
+  width:10%;
+
+}
+
+.false {
+  background-color: #e56317;
+  margin-bottom: 5px;
+  margin-top: 2px;
+  padding: 3px 7px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+  color: white;
+  border-radius: 4px;
+  width:10%;
+
+}
+
+.view-btn {
+  border-color: #1eb6f7;
+  border-style: solid;
+  border-width: thin;
+  margin-bottom: 5px;
+  float:left;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  color: #1eb6f7;
+  border-radius: 4px;
+  transition-duration: 0.4s;
+}
+
+.add-btn {
+  border-color: #e56317;
+  border-style: solid;
+  border-width: thin;
+  margin-bottom: 5px;
+  float:left;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  color: #e56317;
+  border-radius: 4px;
+  transition-duration: 0.4s;
+  background-color: white;
+
+}
+
+.add-btn:hover {
+  background-color: #f2762e;
+  color: white;
+}
+
+.view-btn:hover {
+  background-color: #1eb6f7;
+  color: white;
 }
 
 img {
@@ -65,10 +151,28 @@ img {
 
 /* Add some padding inside the card container */
 .container-card {
-  padding: 2px 16px;
+  float: left;
+  padding: 0px 5px 5px;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  flex:1;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
-@media (max-width: 500px) {
+.buttons-card {
+  float: left;
+  padding: 0px 5px 5px;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  flex:1;
+  margin-top: auto;
+}
+
+
+@media (max-width: 864px) {
   .products {
     grid-template-columns: 1fr;
   }

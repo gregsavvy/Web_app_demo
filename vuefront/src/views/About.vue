@@ -9,15 +9,15 @@
     </div>
 
     <div class="container-main">
-      <h2>About this web app demo</h2>
+      <h2>About this web app demo.</h2>
       <p>
       This is a Web app demo which consists of 3 separate modules:
       <br>
       1. NODE.js (without Express) | RestAPI Backend | ex. localhost:5000/api/products
       <br>
-      2. Vanilla JS | Admin frontend | ex. localhost:8080
+      2. Vanilla JS (no framework) | Admin frontend | ex. localhost:8081
       <br>
-      3. VUE.js | Client frontend | ex. localhost:8081 (in development)
+      3. VUE.js | Client frontend | ex. localhost:8080
       <br>
       <br>
       Scope creep consideration for the demo:
@@ -73,25 +73,27 @@ export default {
 <style scoped>
 * {
       box-sizing: border-box;
+
 }
 
 html {
       margin: 0;
       padding: 0;
       width: 100%;
-      height: 100vh;
+      min-height: 100%;
 }
 
 body {
       margin: 0;
       padding: 0;
       width: 100%;
-      height: 100vh;
+      min-height: 100%;
       font-family: Tahoma, Verdana;
       font-weight: 400;
       background-position: center;
       background-size: cover;
 }
+
 
 .container {
   max-width: 1100px;

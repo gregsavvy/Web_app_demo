@@ -3,9 +3,10 @@
       <div class="card">
        <img :src="getIMG(oneProduct.filename)" style="max-width:60%">
        <div class="container-card">
+         <span :class="`${oneProduct.param3}`">{{ oneProduct.param3 }}</span>
          <h4><b>{{ oneProduct.param1 }}</b></h4>
          <p>{{ oneProduct.param2 }}</p>
-         <button @click="addToCart(oneProduct)">
+         <button class="add-btn" @click="addToCart(oneProduct)">
          Add to cart
          </button>
        </div>
@@ -51,8 +52,60 @@ export default {
 
 /* Add some padding inside the card container */
 .container-card {
+  float:left;
   max-width:40%;
   padding: 5px 16px;
+}
+
+.add-btn {
+  border-color: #e56317;
+  border-style: solid;
+  border-width: thin;
+  margin-bottom: 5px;
+  margin-left: 0px;
+  float:left;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  color: #e56317;
+  border-radius: 4px;
+  transition-duration: 0.4s;
+  background-color: white;
+}
+
+.add-btn:hover {
+  background-color: #f2762e;
+  color: white;
+}
+
+.true {
+  background-color: #2ecc71;
+  margin-bottom: 5px;
+  margin-left: 2px;
+  float:right;
+  padding: 3px 7px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+  color: white;
+  border-radius: 4px;
+}
+
+.false {
+  background-color: #e56317;
+  margin-bottom: 5px;
+  margin-left: 2px;
+  float:right;
+  padding: 3px 7px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+  color: white;
+  border-radius: 4px;
 }
 
 @media (max-width: 500px) {

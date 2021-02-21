@@ -31,6 +31,9 @@ export default {
 nav {
       padding: 8px;
       overflow: auto;
+      border-bottom-color: #3d3d3d;
+      border-bottom-style: solid;
+      border-bottom-width: thin;
 }
 
 .logo {
@@ -41,7 +44,7 @@ nav {
 }
 
 .logo a {
-      color: #000;
+      color: #1eb6f7;
       text-transform: uppercase;
       font-weight: 700;
       font-size: 18px;
@@ -69,12 +72,17 @@ nav ul li:last-child {
 nav ul li a {
       display: inline-block;
       outline: none;
-      color: #000;
+      color: #3d3d3d;
       text-transform: uppercase;
       text-decoration: none;
       font-size: 14px;
       letter-spacing: 1.2px;
       font-weight: 600;
+      padding: 5px 5px;
+}
+
+nav ul li a:hover {
+  color: #1eb6f7;
 }
 
 @media screen and (max-width: 864px) {
@@ -89,9 +97,10 @@ nav ul li a {
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: #fff;
+            background: white;
             opacity: 0;
             transition: all 0.2s ease;
+
       }
 
       .nav-wrapper ul {
@@ -99,6 +108,7 @@ nav ul li a {
             top: 50%;
             transform: translateY(-50%);
             width: 100%;
+
       }
 
       .nav-wrapper ul li {
@@ -132,7 +142,7 @@ nav ul li a {
       .nav-wrapper ul li a {
             padding: 10px 24px;
             opacity: 0;
-            color: #000;
+            color: #3d3d3d;
             font-size: 14px;
             font-weight: 600;
             letter-spacing: 1.2px;
@@ -142,7 +152,7 @@ nav ul li a {
 
       .nav-btn {
             position: fixed;
-            right: 10px;
+            right: 40px;
             top: 10px;
             display: block;
             width: 48px;
