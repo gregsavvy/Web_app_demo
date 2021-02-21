@@ -24,6 +24,13 @@ const domain = process.env.DOMAINFRONT
           }
       })
 }
+
+// random integer
+function randomInteger(min, max) {
+  // получить случайное число от (min-0.5) до (max+0.5)
+  let rand = min - 0.5 + Math.random() * (max - min + 1);
+  return Math.round(rand);
+}
 // end utility
 
 // 1 Gets a user and checks against a session cookie (cookie session token)
@@ -37,7 +44,7 @@ async function getUser(req,res, username) {
     const access_toggle = 'Not Authorized'
     const access_promise = new Promise((resolve,reject) => {
       const user = users.filter((user) => {
-        if (user.username == username && user.session == session.slice(10,13)) {
+        if (user.username == username && user.session == session.slice(10,17)) {
           const access_toggle = 'Authorized'
           resolve(access_toggle)
         }
@@ -113,7 +120,7 @@ async function loginUser(req,res) {
         const cookie_session = 'none'
         users.forEach((user) => {
         if (user.username == username && user.password == password) {
-          user.session = '123'
+          user.session = JSON.stringify(randomInteger(1000000, 9999999))
           const cookie_session = user.session
           const access_user = JSON.stringify(user.username)
           const session_data = `${access_user}/${cookie_session}`

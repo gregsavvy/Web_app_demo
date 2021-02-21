@@ -5,8 +5,9 @@
       :key="product._id"
       class="card"
       >
-       <img :src="getIMG(product.filename)" style="width:100%">
-
+      <div class="container-img">
+       <img :src="getIMG(product.filename)">
+     </div>
        <div class="container-card">
          <span :class="`${product.param3}`">{{ product.param3 }}</span>
          <span><b>{{ product.param1 }}</b></span>
@@ -142,6 +143,7 @@ export default {
 
 img {
   border-radius: 5px 5px 0 0;
+  max-width: 100%;
 }
 
 /* On mouse-over, add a deeper shadow */
@@ -156,7 +158,6 @@ img {
   display: flex;
   justify-content: flex-end;
   flex-direction: column;
-  flex:1;
   margin-top: auto;
   margin-bottom: auto;
 }
@@ -169,6 +170,12 @@ img {
   flex-direction: column;
   flex:1;
   margin-top: auto;
+}
+
+.container-img {
+  padding-bottom: 65%;
+  height: 0;
+  overflow: hidden;
 }
 
 

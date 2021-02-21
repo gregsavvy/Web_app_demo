@@ -1,6 +1,6 @@
 {
   "name": "test-app",
-  "version": "0.1.0",
+  "version": "1.0",
   "private": true,
   "dependencies": {
     "busboy": "^0.2.14",
@@ -10,7 +10,7 @@
     "mongoose": "^5.10.13"
   },
   "dependenciesComments": {
-    "@vue/cli": "Used on frontend client, NOT on frontend admin",
+    "vue": "Used on frontend client in separate module, NOT on frontend admin",
     "busboy": "Used for fileserver",
     "concurrently": "Used for npm start command of two separate node servers",
     "dotenv": "configures process.env variables",
@@ -20,7 +20,8 @@
   "scripts": {
     "backend": "node ./backend/server.js",
     "frontend": "node ./admin/test_server/frontserver.js",
-    "start": "concurrently \"npm run backend\" \"npm run frontend\""
+    "vuefront": "npm --prefix ./vuefront run serve",
+    "start": "concurrently \"npm run backend\" \"npm run frontend\" \"npm run vuefront\""
   },
   "eslintConfig": {
     "extends": []

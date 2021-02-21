@@ -13,8 +13,9 @@ Scope creep consideration for the demo:
 3. No API test framework implementation (ex. Mocha).
 4. No proper storage for users, currently they are stored in './backend/models/users.json' for ease of running this demo (ex. local mySQL implementation would require Docker implementation as well).
 5. No checkout and payment functionality on frontend, consequently no inventory management functionality as well.
+6. No infinite scrolling functionality.
 
-Installation:
+Installation (Linux):
 
 1. Install Node.js (https://nodejs.org/en/).
 2. Pull git repo into any directory, - $git remote add demo https://github.com/gregsavvy/Test-Web-App.git), then $git pull demo
@@ -22,6 +23,9 @@ Installation:
 
 Run:
 1. From the main directory, - $npm start
+This command will start all 3 modules in one terminal window.
+
+For separate commands, please see package.json file.
 
 PS:
 Do not run this app on production systems without taking into consideration the aforementioned scope creep of the demo.

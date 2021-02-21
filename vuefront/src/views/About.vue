@@ -32,6 +32,8 @@
       <br>
       5. No checkout and payment functionality on frontend, consequently no inventory management functionality as well.
       <br>
+      6. No infinite scrolling functionality.
+      <br>
       <br>
 
       Installation:

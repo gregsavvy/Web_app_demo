@@ -26,7 +26,7 @@
                     @click="decrementItemQuantity(product)">-</button>
                 <br>
                 <button class="action-btn-delete"
-                    @click="deleteFromCart(product)">x</button>
+                    @click="deleteFromCart(product)">Remove</button>
                 </td>
             </tr>
 
@@ -139,7 +139,7 @@ ul {
 
   display: inline-block;
   font-size: 15px;
-  border-radius: 4px;
+  border-radius: 15px;
   border: none;
   color:white;
 }
@@ -157,7 +157,7 @@ ul {
 
   display: inline-block;
   font-size: 15px;
-  border-radius: 4px;
+  border-radius:15px;
   border: none;
   color:white;
 }
@@ -169,12 +169,12 @@ ul {
 .action-btn-delete {
   background-color: #d12a2a;
   margin-bottom: 5px;
-  margin-top: 2px;
+  margin-top: 15px;
   padding: 5px 21px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 15px;
+  font-size: 10px;
   border-radius: 4px;
   border: none;
   color:white;
