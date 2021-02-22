@@ -18,10 +18,11 @@ Scope creep consideration for the demo:
 Installation (Linux):
 
 1. Install Node.js (https://nodejs.org/en/).
-2. Pull git repo into any directory, - $git remote add demo https://github.com/gregsavvy/Test-Web-App.git), then $git pull demo
-3. Install dependencies, - $npm install
+2. Install git $sudo apt-get install git-all
+3. Pull git repo into any directory, - $git remote add demo https://github.com/gregsavvy/Test-Web-App.git), then $git pull demo
+4. Install dependencies, - $npm install
 
-For ease of installation all dependencies are put inside root package.json. It's considered best practice to separate dependencies for backend and frontend.
+For ease of installation all dependencies are put inside root package.json. As a side note, it's considered best practice to separate dependencies for backend and frontend.
 
 Ease of running dependencies:
 1. "express": "^4.17.1",
@@ -41,12 +42,12 @@ Frontend dependencies:
 6. "vuex": "^3.6.2",
 7. "vuex-persistedstate": "^4.0.0-beta.3"
 
-Run:
+Run (Linux):
 1. From the main directory, - $npm start
 
 This command will start all 3 modules in one terminal window.
 
-For separate commands, please see package.json file.
+For separate commands, please see package.json files.
 
 PS:
 Do not run this app on production systems without taking into consideration the aforementioned scope creep of the demo.
