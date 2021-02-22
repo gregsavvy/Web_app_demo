@@ -99,8 +99,10 @@ document.querySelector('#product-form').addEventListener('submit', (e) => {
     formData.append(key, good[key])
     }
 
-    const files = document.querySelector('#attachment').files[0]
-    formData.append('file', files)
+    for (i=0;i<document.querySelector('#attachment').files.length;i++) {
+      const files = document.querySelector('#attachment').files[i]
+      formData.append('file[]', files)
+    }
 
     try {
       const response = fetch(`${domain_back}/api/products`, {

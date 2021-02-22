@@ -112,6 +112,8 @@ a:hover {
 /*table styles */
 table {
   border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
 }
 
 th {
@@ -135,6 +137,13 @@ ul {
   padding: 0.75rem;
   vertical-align: top;
   border-top: 1px solid #dee2e6;
+  overflow: hidden;
+
+}
+
+.table td {
+  overflow-wrap: break-word;
+
 }
 
 .table thead th {
@@ -146,11 +155,18 @@ ul {
   border-top: 2px solid #dee2e6;
 }
 
-
 .table-hover tbody tr:hover {
   color: #212529;
   background-color: rgba(0, 0, 0, 0.075);
 }
+
+@media (max-width: 600px) {
+  .table td {
+    overflow-wrap: normal;
+  }
+}
+
+
 
 /* form styles */
 .form-control {

@@ -1,7 +1,14 @@
 <template>
-
       <div class="card">
-       <img :src="getIMG(oneProduct.filename)" style="max-width:60%">
+
+          <div class="container-img" v-for="i in [currentIndex]" :key="i">
+            <img :src="getIMG(oneProduct.filename)" />
+            <div class="control-card">
+              <a class="prev" @click="prev(oneProduct.filename.length)" href="#">&#10094; Previous image</a>
+              <a class="next" @click="next(oneProduct.filename.length)" href="#">&#10095; Next image</a>
+            </div>
+          </div>
+
        <div class="container-card">
          <span :class="`${oneProduct.param3}`">{{ oneProduct.param3 }}</span>
          <h4><b>{{ oneProduct.param1 }}</b></h4>
@@ -10,6 +17,7 @@
          Add to cart
          </button>
        </div>
+
       </div>
 
 </template>
@@ -19,12 +27,29 @@ import { mapGetters, mapActions } from "vuex"
 
 export default {
   name: "ProductComponent",
+  data() {
+    return {
+      currentIndex: 0
+    }
+  },
   methods: {
     ...mapActions(["fetchProduct", 'addToCart']),
-    getIMG: function getIMG(filename) {
+    getIMG: function getIMG(filenames) {
+      if (this.currentIndex>filenames.length-1) {
+        this.currentIndex = 0
+      } else if (this.currentIndex<0) {
+        this.currentIndex = filenames.length-1
+      }
+      let index = this.currentIndex
       var domain_back = 'http://localhost:5000/api/products_img/'
-      var src = `${domain_back}${filename}`
-      return src
+        var src = `${domain_back}${filenames[index]}`
+        return src
+      },
+    next: function() {
+        this.currentIndex += 1
+    },
+    prev: function() {
+        this.currentIndex -= 1
     }
   },
   computed: mapGetters(["oneProduct"]),
@@ -106,6 +131,60 @@ export default {
   font-size: 10px;
   color: white;
   border-radius: 4px;
+}
+
+img {
+  height:auto;
+  max-width:100%;
+}
+
+.container-img {
+  position: relative;
+  max-width:75%;
+}
+
+.prev, .next {
+  padding: 0px 5px 5px;
+  margin-top: auto;
+  cursor: pointer;
+  width: auto;
+  background-color: grey;
+  color: white;
+  font-size: 15px;
+  transition: 0.2s ease;
+  border-radius: 2px;
+  text-decoration: none;
+  user-select: none;
+  opacity: 80%;
+}
+
+.next {
+  float: right;
+}
+
+.prev {
+  float: left;
+}
+
+.control-card {
+  width:100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  font-size: 18px;
+}
+
+.next {
+  right: 0;
+}
+
+.prev {
+  left: 0;
+}
+
+.prev:hover, .next:hover {
+  background-color: #1eb6f7;
+  opacity: 100%;
 }
 
 @media (max-width: 500px) {

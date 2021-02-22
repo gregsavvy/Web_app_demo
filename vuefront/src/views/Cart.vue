@@ -60,11 +60,10 @@ body {
 }
 
 .container-main {
+  margin-top: 70px;
   max-width: 1100px;
   margin: auto;
-  padding: 0 4rem;
-  display: flex;
-  width: 100%;
+  padding: 2rem 4rem;
 }
 
 </style>

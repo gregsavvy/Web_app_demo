@@ -13,11 +13,11 @@
       <p>
       This is a Web app demo which consists of 3 separate modules:
       <br>
-      1. NODE.js (without Express) | RestAPI Backend | ex. localhost:5000/api/products
+      1. NODE.js (without Express) | Independent RestAPI backend (JSON provider, file and img host) | ex. localhost:5000/api/products or localhost:5000/api/products_img/{:img}
       <br>
-      2. Vanilla JS (no framework) | Admin frontend | ex. localhost:8081
+      2. Vanilla JS | Admin frontend used for product management | ex. localhost:8081
       <br>
-      3. VUE.js | Client frontend | ex. localhost:8080
+      3. VUE.js | Client frontend with shopping cart | ex. localhost:8080
       <br>
       <br>
       Scope creep consideration for the demo:

@@ -48,15 +48,18 @@ async function createProduct(req,res) {
     // busboy form parsing
     var busboy = new Busboy({ headers: req.headers })
     let body = {}
+    let filename_list = []
        busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-         var saveTo = path.resolve('./backend/src/img/', `${filename.substr(0, filename.lastIndexOf("."))}_${Date.now()}_${path.extname(filename)}`)
+         const filename_server = `${filename.substr(0, filename.lastIndexOf("."))}_${Date.now()}_${path.extname(filename)}`
+         var saveTo = path.resolve('./backend/src/img/', filename_server)
          file.pipe(fs.createWriteStream(saveTo))
-         body['filename'] = `${filename.substr(0, filename.lastIndexOf("."))}_${Date.now()}_${path.extname(filename)}`
+         filename_list.push(filename_server)
        })
        busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
          body[fieldname] = val
        })
        busboy.on('finish', function() {
+         body['filename'] = filename_list
          const { param1, param2, param3, filename, date } = JSON.parse(JSON.stringify(body))
          const newGoods = new Goods({
            param1,
@@ -78,15 +81,20 @@ async function updateProduct(req, res, id) {
   // busboy form parsing
   var busboy = new Busboy({ headers: req.headers })
   let body = {}
-     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-       var saveTo = path.resolve('./backend/src/img/', `${filename.substr(0, filename.lastIndexOf("."))}_${Date.now()}_${path.extname(filename)}`)
-       file.pipe(fs.createWriteStream(saveTo))
-       body['filename'] = `${filename.substr(0, filename.lastIndexOf("."))}_${Date.now()}_${path.extname(filename)}`
-     })
+  let filename_list = []
+      busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+        const filename_server = `${filename.substr(0, filename.lastIndexOf("."))}_${Date.now()}_${path.extname(filename)}`
+        var saveTo = path.resolve('./backend/src/img/', filename_server)
+        file.pipe(fs.createWriteStream(saveTo))
+        filename_list.push(filename_server)
+      })
      busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
        body[fieldname] = val
      })
      busboy.on('finish', function() {
+       if (filename_list.length>0) {
+       body['filename'] = filename_list
+     }
        const { param1, param2, param3, filename, date } = JSON.parse(JSON.stringify(body))
 
        Goods.findById(id)

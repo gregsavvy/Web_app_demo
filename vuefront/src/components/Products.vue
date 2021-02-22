@@ -6,7 +6,7 @@
       class="card"
       >
       <div class="container-img">
-       <img :src="getIMG(product.filename)">
+       <img :src="getIMG(product.filename[0])">
      </div>
        <div class="container-card">
          <span :class="`${product.param3}`">{{ product.param3 }}</span>

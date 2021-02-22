@@ -26,7 +26,7 @@ const goodsSchema = new Schema({
   },
   filename: {
     data: Buffer,
-    type: String,
+    type: Array,
   },
   date: {
     type: Date,
