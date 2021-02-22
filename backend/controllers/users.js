@@ -44,7 +44,7 @@ async function getUser(req,res, username) {
     const access_toggle = 'Not Authorized'
     const access_promise = new Promise((resolve,reject) => {
       const user = users.filter((user) => {
-        if (user.username == username && user.session == session.slice(10,17)) {
+        if (user.username == username && user.session == session.slice(session.indexOf('sessionId=')+10)) {
           const access_toggle = 'Authorized'
           resolve(access_toggle)
         }
