@@ -9,6 +9,7 @@
     </div>
 
     <div class="container-main">
+      <FilterProducts/>
       <Products/>
     </div>
   </div>
@@ -16,6 +17,7 @@
 
 <script>
 import Navbar from "../components/Navbar.vue"
+import FilterProducts from "../components/FilterProducts.vue"
 import Products from "../components/Products.vue"
 import CartNav from "../components/CartNav.vue"
 
@@ -23,6 +25,7 @@ export default {
   name: "Home",
   components: {
     Navbar,
+    FilterProducts,
     Products,
     CartNav
   }

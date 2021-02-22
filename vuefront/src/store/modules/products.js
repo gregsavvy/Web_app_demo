@@ -51,6 +51,21 @@ const actions = {
     .catch(error => console.log(error))
   },
 
+  async filterProducts({ commit }, e) {
+    // Get selected number
+    const limit = parseInt(
+      e.target.options[e.target.options.selectedIndex].innerText
+    )
+    const response = await fetch(
+      `${domain_back}/api/products_search/limit=${limit}`
+    )
+    .then(response => response.json())
+    .then(data => {
+      commit('setProducts', data)
+    })
+    .catch(error => console.log(error))
+  },
+
   addToCart ({state, commit}, product) {
       const item = state.cart.find(item => item.id === product._id)
       if (!item) {

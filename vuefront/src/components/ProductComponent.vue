@@ -4,8 +4,11 @@
           <div class="container-img" v-for="i in [currentIndex]" :key="i">
             <img :src="getIMG(oneProduct.filename)" />
             <div class="control-card">
-              <a class="prev" @click="prev(oneProduct.filename.length)" href="#">&#10094; Previous image</a>
-              <a class="next" @click="next(oneProduct.filename.length)" href="#">&#10095; Next image</a>
+              <span class="prev" @click="prev()">&#10094; Previous image</span>
+              <div class="container-counter">
+              <span class="counter">{{currentIndex+1}} / {{oneProduct.filename.length}}</span>
+              </div>
+              <span class="next" @click="next()">&#10095; Next image</span>
             </div>
           </div>
 
@@ -143,7 +146,7 @@ img {
   max-width:75%;
 }
 
-.prev, .next {
+.prev, .next, .counter {
   padding: 0px 5px 5px;
   margin-top: auto;
   cursor: pointer;
@@ -164,6 +167,11 @@ img {
 
 .prev {
   float: left;
+}
+
+.container-counter {
+  position: absolute;
+  left:50%;
 }
 
 .control-card {

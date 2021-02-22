@@ -100,7 +100,6 @@ nav ul li a:hover {
             background: white;
             opacity: 0;
             transition: all 0.2s ease;
-
       }
 
       .nav-wrapper ul {
@@ -146,7 +145,7 @@ nav ul li a:hover {
             font-size: 14px;
             font-weight: 600;
             letter-spacing: 1.2px;
-            transform: translateX(-20px);
+            transform: translateX(100px);
             transition: all 0.2s ease;
       }
 

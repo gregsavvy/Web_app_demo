@@ -134,12 +134,12 @@ ul {
   background-color: #1eb6f7;
   margin-bottom: 5px;
   margin-top: 2px;
-  padding: 5px 21px;
+  padding: 5px 35px;
   text-align: center;
 
   display: inline-block;
   font-size: 15px;
-  border-radius: 15px;
+  border-radius: 20px;
   border: none;
   color:white;
 }
@@ -152,12 +152,12 @@ ul {
   background-color: #2ecc71;
   margin-bottom: 5px;
   margin-top: 2px;
-  padding: 5px 20px;
+  padding: 5px 35px;
   text-align: center;
 
   display: inline-block;
   font-size: 15px;
-  border-radius:15px;
+  border-radius:20px;
   border: none;
   color:white;
 }
