@@ -43,6 +43,7 @@ Frontend dependencies:
 
 Run:
 1. From the main directory, - $npm start
+
 This command will start all 3 modules in one terminal window.
 
 For separate commands, please see package.json file.
