@@ -3,19 +3,35 @@
   "version": "1.0",
   "private": true,
   "dependencies": {
+    "@vue/cli": "^4.5.11",
     "busboy": "^0.2.14",
     "concurrently": "^5.3.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.10.13"
+    "file-loader": "^4.3.0",
+    "mongoose": "^5.10.13",
+    "url-loader": "^2.3.0",
+    "vue": "^2.6.11",
+    "vue-router": "^3.5.1",
+    "vuex": "^3.6.2",
+    "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "dependenciesComments": {
-    "vue": "Used on frontend client in separate module, NOT on frontend admin",
+    "vue and lower": "Used on frontend client in separate module, NOT on frontend admin",
     "busboy": "Used for fileserver",
     "concurrently": "Used for npm start command of two separate node servers",
     "dotenv": "configures process.env variables",
     "express": "ONLY used for serving static content on frontend admin",
     "mongoose": "Used for mongodb atlas"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "vue-template-compiler": "^2.6.11"
   },
   "scripts": {
     "backend": "node ./backend/server.js",
@@ -24,18 +40,22 @@
     "start": "concurrently \"npm run backend\" \"npm run frontend\" \"npm run vuefront\""
   },
   "eslintConfig": {
-    "extends": []
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
     ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }
