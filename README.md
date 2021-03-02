@@ -55,4 +55,4 @@ PS:
 Do not run this app on production systems without taking into consideration the aforementioned scope creep of the demo.
 
 PPS:
-Dockerfile and docker-compose.yml are not optimized implementations of docker for this project because of it's root dependencies structure. They are only there for a check mark.
+Dockerfile and docker-compose.yml are not optimized implementations of docker for this project because of it's root dependencies structure. They work but are only there for a Docker demo.
