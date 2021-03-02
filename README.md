@@ -11,7 +11,7 @@ Scope creep consideration for the demo:
 1. No cryptographic hash functions implementation on session cookies and user passwords (ex. bcrypt).
 2. No https implementation (consequently no 'Secure' parameter on cookie headers).
 3. No API test framework implementation (ex. Mocha).
-4. No proper storage for users, currently they are stored in './backend/models/users.json' for ease of running this demo (ex. local mySQL implementation would require Docker implementation as well).
+4. No proper storage for users, currently they are stored in './backend/models/users.json' for ease of running this demo without Docker.
 5. No checkout and payment functionality on frontend, consequently no inventory management functionality as well.
 6. No infinite scrolling functionality.
 
@@ -51,3 +51,6 @@ For separate commands, please see package.json files.
 
 PS:
 Do not run this app on production systems without taking into consideration the aforementioned scope creep of the demo.
+
+PPS:
+Dockerfile and docker-compose.yml are not optimized implementations of docker for this project because of it's root dependencies structure. They are only there for a check mark.
