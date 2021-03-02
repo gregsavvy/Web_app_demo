@@ -6,6 +6,8 @@ This is a Web app demo which consists of 3 separate modules:
 2. Vanilla JS | Admin frontend used for product management | ex. localhost:8081
 3. VUE.js | Client frontend with shopping cart | ex. localhost:8080
 
+Login and password for admin frontend: admin | admin.
+
 Scope creep consideration for the demo:
 
 1. No cryptographic hash functions implementation on session cookies and user passwords (ex. bcrypt).
