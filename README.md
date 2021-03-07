@@ -56,3 +56,6 @@ Do not run this app on production systems without taking into consideration the 
 
 PPS:
 Dockerfile and docker-compose.yml are not optimized implementations of docker for this project because of it's root dependencies structure. They work but are only there for a Docker demo.
+
+PPPS:
+I consciously left a working connection to MongoDB Atlas for ease of running this demo without Docker. Please, be responsible in that regard.
