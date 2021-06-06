@@ -3,7 +3,7 @@ version: "3"
 services:
   vuefront:
     container_name: vue
-    build: ./
+    build: ./vuefront
     ports:
       - "8080:8080"
     network_mode: host
@@ -12,7 +12,7 @@ services:
 
   admin:
     container_name: admin
-    build: ./
+    build: ./admin
     ports:
       - "8081:8081"
     network_mode: host
@@ -21,22 +21,48 @@ services:
 
   backend:
     container_name: nodejs
-    build: ./
+    build: ./backend
     network_mode: host
     ports:
       - "5000:5000"
-  #  depends_on:
-  #     - db
-  #
-  # db:
-  #   image: mysql:5
-  #   restart: always
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: example
-  #     MYSQL_DATABASE: users
-  #     MYSQL_USER: test
-  #     MYSQL_PASSWORD: test123
-  #   ports:
-  #     - "3307:3306"
-  #   volumes:
-  #     - ./docker/data/db:/var/lib/mysql
+    depends_on:
+      - mongo
+      - db
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: default
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+    ports:
+      - "6000:6000"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 6060:6060
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: default
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - 7000:7000
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 7070:7070
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_AUTH_USERNAME: admin
+      ME_CONFIG_MONGODB_AUTH_PASSWORD: admin
+      ME_CONFIG_MONGODB_AUTH_DATABASE: default

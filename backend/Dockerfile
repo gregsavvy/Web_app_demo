@@ -6,4 +6,4 @@ RUN npm install --no-optional
 
 COPY . .
 
-CMD npm start
+CMD npm run backend

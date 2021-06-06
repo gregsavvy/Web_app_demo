@@ -1,0 +1,43 @@
+{
+  "name": "test-app",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "busboy": "^0.2.14",
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.10.13",
+    "pg": "^8.6.0"
+  },
+  "dependenciesComments": {
+    "busboy": "Used for fileserver",
+    "dotenv": "configures process.env variables",
+    "mongoose": "Used for mongodb atlas",
+    "pg": "Used for PostgreSQL connection"
+  },
+  "devDependencies": {
+    "file-loader": "^4.3.0",
+    "url-loader": "^2.3.0"
+  },
+  "scripts": {
+    "backend": "node ./server.js"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

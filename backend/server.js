@@ -13,11 +13,11 @@ require('dotenv').config({path: path.resolve(__dirname+'/.env')})
 const domain = process.env.DOMAINFRONT
 
 // Product database connection
-const uri = process.env.ATLAS_URI
+const uri = process.env.URI
 mongoose.connect(`${uri}`, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true },
   () => {
-    console.log("Connected to MongoDB Atlas"
-  )},
+    console.log("Connected to MongoDB")
+  },
   (err) => {
     console.log("Unable to connect to MongoDB. Error: " + err)
   })

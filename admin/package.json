@@ -1,0 +1,36 @@
+{
+  "name": "test-app",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "dependenciesComments": {
+    "express": "ONLY used for serving static content on frontend admin"
+  },
+  "devDependencies": {
+   
+  },
+  "scripts": {
+    "frontend": "node ./test_server/frontserver.js"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

@@ -7,7 +7,8 @@
     "concurrently": "^5.3.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.10.13"
+    "mongoose": "^5.10.13",
+    "pg": "^8.6.0"
   },
   "dependenciesComments": {
     "vue": "Used on frontend client in separate module, NOT on frontend admin",
@@ -15,7 +16,8 @@
     "busboy": "Used for fileserver",
     "concurrently": "Used for npm start command of two separate node servers",
     "dotenv": "configures process.env variables",
-    "mongoose": "Used for mongodb atlas"
+    "mongoose": "Used for mongodb atlas",
+    "pg": "Used for PostgreSQL connection"
   },
   "devDependencies": {
     "@vue/cli": "^4.5.11",
