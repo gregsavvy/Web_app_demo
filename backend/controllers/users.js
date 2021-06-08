@@ -65,11 +65,11 @@ async function getUser(req,res, username) {
 
 // 2 Gets all users
 async function getUsers(req,res) {
-  const text = 'INSERT INTO users(name, email) VALUES($1, $2) RETURNING *'
-  const values = ['brianc', 'brian.m.carlson@gmail.com']
+  const text = 'INSERT INTO users(email, password, date, session) VALUES($1, $2, $3, $4) RETURNING *'
+  const values = ['brian.m.carlson@gmail.com', '123', '30/05/2021', 'NULL']
   user.query(text, values)
-    .then(res => {
-      res.write(JSON.stringify(res.rows[0]))
+    .then(result => {
+      res.write(JSON.stringify(result.rows[0]))
       res.end()
     })
     .catch(e => console.error(e.stack))

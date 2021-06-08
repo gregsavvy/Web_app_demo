@@ -31,10 +31,16 @@ user.connect()
   .then(() => console.log('Connected to Postgres'))
   .catch(e => console.error(e.stack))
 
-user.query('SELECT NOW() as now')
+user.query(`CREATE TABLE users (
+  email varchar,
+  password varchar,
+  date varchar,
+  session varchar
+  );`
+  )
   .then(res => console.log(res.rows[0]))
   .catch(e => console.error(e.stack))
-  
+
 // [{"username":"admin",
 //     "email":"admin@admin.com",
 //     "password":"admin",
