@@ -32,6 +32,7 @@ user.connect()
   .catch(e => console.error(e.stack))
 
 user.query(`CREATE TABLE users (
+  username varchar,
   email varchar,
   password varchar,
   date varchar,
