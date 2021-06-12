@@ -42,12 +42,17 @@ user.query(`CREATE TABLE users (
   .then(res => console.log(res.rows[0]))
   .catch(e => console.error(e.stack))
 
+// default user
+
 // [{"username":"admin",
 //     "email":"admin@admin.com",
 //     "password":"admin",
 //     "date":"2021-01-01",
 //     "session":""
 // }]
+
+user.query('INSERT INTO users(username, email, password, date, session) VALUES(admin, admin@admin.com, admin, 2021-01-01, NULL)')
+  .catch(e => console.error(e.stack))
 
 exports.user = user
 exports.pool = pool

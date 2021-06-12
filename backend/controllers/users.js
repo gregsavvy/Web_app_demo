@@ -36,25 +36,23 @@ function randomInteger(min, max) {
 // 1 Gets a user and checks against a session cookie (cookie session token)
 async function getUser(req,res, username) {
   try {
-  const session = req.headers.cookie || 'SessionID Not authorized'
+  const sessionCookie = req.headers.cookie || 'SessionID Not authorized'
 
-  user.query('SELECT * from users')
+  user.query(`SELECT * FROM users WHERE username=${username}`)
     .then(result => {
-      const usersRaw = JSON.stringify(result.rows[0])
-      const usersClean = JSON.parse(usersRaw)
+      const dbUser = JSON.parse(JSON.stringify(result.rows[0]))
 
-      const access_toggle = 'Not Authorized'
-      const access_promise = new Promise((resolve,reject) => {
-        usersClean.filter((user) => {
-          if (user.username == username && user.session == session.slice(session.indexOf('sessionId=')+10)) {
-            const access_toggle = 'Authorized'
-            resolve(access_toggle)
-          }
-        })
-        resolve(access_toggle)
+      const accessToggle = 'Not Authorized'
+      const accessPromise = new Promise((resolve,reject) => {
+        // to be tested in terms of slice
+        if (dbUser.username == username && dbUser.session == sessionCookie.slice(sessionCookie.indexOf('sessionId=')+10)) {
+          const accessToggle = 'Authorized'
+          resolve(accessToggle)
+        }
+        resolve(accessToggle)
 
-        }).then((access_toggle) => {
-        res.write(JSON.stringify(access_toggle))
+        }).then((accessToggle) => {
+        res.write(JSON.stringify(accessToggle))
         res.end()
       })
       
@@ -83,30 +81,25 @@ async function createUser(req, res) {
         const body = await readyJSON(req)
         const { username, email, password, date } = JSON.parse(body)
 
-        user.query('SELECT * from users(username, email)')
+        user.query(`SELECT * FROM users WHERE username=${username} OR email=${email}`)
           .then(result => {
-            // to be tested
-            const dbInfo = JSON.stringify(result.rows[0])
+            const dbUsers = JSON.parse(JSON.stringify(result.rows[0]))
+
+            if (dbUsers.length > 0) {
+              res.end(JSON.stringify('User already exists!'))
+            } else {
+                text = 'INSERT INTO users(username, email, password, date, session) VALUES($1, $2, $3, $4, $5) RETURNING *'
+                values = [username, email, password, date, 'NULL']
+
+                user.query(text, values)
+                  .then(result => {
+                    res.write(JSON.stringify(result.rows[0]))
+                    res.end(JSON.stringify('Done!'))
+                  })
+                  .catch(e => console.error(e.stack))
+              }
           })
           .catch(e => console.error(e.stack))
-
-        // to be tested
-        const usersExist = users.filter(user => user.username == newUser.username || user.email == newUser.email)
-
-        if (usersExist.length > 0) {
-          res.end(JSON.stringify('User already exists!'))
-        } else {
-            text = 'INSERT INTO users(username, email, password, date, session) VALUES($1, $2, $3, $4, $5) RETURNING *'
-            values = [username, email, password, date, 'NULL']
-
-            user.query(text, values)
-              .then(result => {
-                res.write(JSON.stringify(result.rows[0]))
-                res.end()
-              })
-              .catch(e => console.error(e.stack))
-            res.end(JSON.stringify('Done!'))
-          }
 
     } catch (error) {
         console.log(error)
@@ -119,42 +112,50 @@ async function loginUser(req,res) {
     const body = await readyJSON(req)
     const { username, password } = JSON.parse(body)
 
-    user.query('SELECT * from users')
-    .then(result => {
-      const usersRaw = JSON.stringify(result.rows[0])
-      const usersClean = JSON.parse(usersRaw)
+    user.query(`SELECT * FROM users WHERE username=${username} AND password=${password}`)
+      .then(result => {
+        const dbUser = JSON.parse(JSON.stringify(result.rows[0]))
 
-      const access_promise = new Promise((resolve,reject) => {
-        const access_user = JSON.stringify('Not Authorized')
-        const cookie_session = 'none'
+        const accessPromise = new Promise((resolve,reject) => {
+          const sessionUser = JSON.stringify('Not Authorized')
+          const sessionCookie = 'NULL'
 
-        // to be tested
-        usersClean.forEach((user) => {
-        if (user.username == username && user.password == password) {
-          user.session = JSON.stringify(randomInteger(1000000, 9999999))
-          const cookie_session = user.session
-          const access_user = JSON.stringify(user.username)
-          const session_data = `${access_user}/${cookie_session}`
-          resolve(session_data)
-        }
+          if (dbUser.username == username && dbUser.password == password) {
+            sessionCookie = JSON.stringify(randomInteger(100000000, 999999999999999))
+  
+            const sessionData = `${JSON.stringify(dbUser.username)}/${sessionCookie}`
+            resolve(sessionData)
+          }
+          const sessionData = `${sessionUser}/${sessionCookie}`
+          resolve(sessionData)
+
+        }).then((sessionData) => {
+            const sessionUser = sessionData.split('/')[0]
+            const sessionCookie = sessionData.split('/')[1]
+
+            user.query(`INSERT INTO users(session) VALUES(${sessionCookie}) WHERE users=${sessionUser} RETURNING *`)
+              .then(result => {
+                const dbUser = JSON.parse(JSON.stringify(result.rows[0]))
+
+                if (dbUser.session == sessionCookie) {
+                  res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,
+                  'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+                  'Access-Control-Allow-Headers': 'Content-Type',
+                  'Access-Control-Allow-Credentials': 'true',
+                  'Set-Cookie': `sessionId=${sessionCookie}; SameSite=Lax; path=/; HttpOnly`})
+                  // No "Secure" param on cookie (https implementation required on server)
+
+                  res.write(sessionUser)
+                  res.end()
+                } else {
+                  res.write(JSON.stringify('Something went wrong with writing to db!'))
+                  res.end()
+                }
+              })
+
+          })
+
       })
-
-      const session_data = `${access_user}/${cookie_session}`
-      resolve(session_data)
-    }).then((session_data) => {
-        const access_user = session_data.split('/')[0]
-        const cookie_session = session_data.split('/')[1]
-        res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,
-        'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Credentials': 'true',
-        'Set-Cookie': `sessionId=${cookie_session}; SameSite=Lax; path=/; HttpOnly`})
-        // No "Secure" param on cookie (https implementation required on server)
-        res.write(access_user)
-        res.end()
-      })
-
-    })
     .catch(e => console.error(e.stack))
       
   } catch (error) {
@@ -165,33 +166,40 @@ async function loginUser(req,res) {
 // 5 Logout user and delete session cookie
 async function logoutUser(req,res) {
   try {
-  const body = await readyJSON(req)
-  const { username } = JSON.parse(body)
+    const body = await readyJSON(req)
+    const { username } = JSON.parse(body)
 
-  user.query('SELECT * from users')
-    .then(result => {
-      const usersRaw = JSON.stringify(result.rows[0])
-      const usersClean = JSON.parse(usersRaw)
+    user.query(`SELECT * FROM users WHERE username=${username}`)
+      .then(result => {
+        const dbUser = JSON.parse(JSON.stringify(result.rows[0]))
 
-      // to be tested
-      usersClean.forEach((user) => {
-        if (user.username == username) {
-          user.session = ''
-          res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,
-          'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
-          'Access-Control-Allow-Credentials': 'true',
-          'Set-Cookie': `sessionId=none; SameSite=Lax; path=/; HttpOnly`})
-          // No "Secure" param on cookie (https implementation required on server)
-          res.end(JSON.stringify('User logged out!'))
+        if (dbUser.username == username) {
+          const sessionCookie = 'NULL'
+
+          user.query(`INSERT INTO users(session) VALUES(${sessionCookie}) WHERE users=${username} RETURNING *`)
+          .then(result => {
+            const dbUser = JSON.parse(JSON.stringify(result.rows[0]))
+
+            if (dbUser.session == sessionCookie) {
+              res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,
+              'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Allow-Credentials': 'true',
+              'Set-Cookie': `sessionId=${sessionCookie}; SameSite=Lax; path=/; HttpOnly`})
+              // No "Secure" param on cookie (https implementation required on server)
+
+              res.write('User logged out!')
+              res.end()
+            } else {
+              res.write(JSON.stringify('Something went wrong with writing to db!'))
+              res.end()
+            }
+          })
         }
+        
       })
+      .catch(e => console.error(e.stack))
 
-    })
-    .catch(e => console.error(e.stack))
-
-
-   
   }  catch (error) {
       console.log(error)
   }

@@ -12,7 +12,7 @@ document.querySelector('.sidebar').addEventListener('click', (e) => {
   console.log(e.target)
   if (e.target.parentElement.id == 'logout-button' || e.target.id == 'logout-button') {
     try {
-      const access_promise = new Promise ((resolve,reject) => {
+      const accessPromise = new Promise ((resolve,reject) => {
         const username = {username: localStorage.getItem('username')}
         resolve(username)
       }).then((username) => {
