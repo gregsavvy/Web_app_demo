@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
           cache: 'no-cache',
         }).then(response => response.json())
         .then(data => {
-          if (data == 'Authorized') {
+          if (data == "Authorized") {
             // on load logic
             if (e.target.URL == `${domain_front}/admin_list.html`) {
               const url = `${domain_back}/api/products`
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
               console.log('DOM without API request loaded')
             }
             // on load logic
-          } else if (data == 'Not Authorized') {
+          } else if (data == "Not Authorized") {
               window.location.replace(`${domain_front}/admin_login.html`)
               console.log('Not Authorized to view this page. Please, login!')
           } else {
@@ -148,7 +148,7 @@ document.querySelector('.sidebar').addEventListener('click', (e) => {
           body: JSON.stringify(username)
         }).then(response => response.json())
         .then(data => {
-          if (data == 'User logged out!') {
+          if (data == "User logged out!") {
             window.location.replace(`${domain_front}/admin_login.html`)
             localStorage.setItem('username', '')
           } else {

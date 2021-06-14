@@ -67,9 +67,11 @@ document.querySelector('#registration-form').addEventListener('submit', (e) => {
         body: JSON.stringify(data)
       }).then(response => response.json())
       .then(data => {
-        if (data == 'Done!') {
+        if (data == "Done!") {
           UI.showAlert('You can now login', 'success')
           UI.clearFields()
+        } else if (data == "User already exists!") {
+          UI.showAlert('User already exists', 'danger')
         } else {
           UI.showAlert('Something went wrong', 'danger')
         }

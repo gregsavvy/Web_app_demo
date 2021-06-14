@@ -178,7 +178,7 @@ document.querySelector('.sidebar').addEventListener('click', (e) => {
           body: JSON.stringify(username)
         }).then(response => response.json())
         .then(data => {
-          if (data == 'User logged out!') {
+          if (data == "User logged out!") {
             window.location.replace(`${domain_front}/admin_login.html`)
             localStorage.setItem('username', '')
           } else {

@@ -55,7 +55,7 @@ document.querySelector('#login-form').addEventListener('submit', (e) => {
         body: JSON.stringify(data)
       }).then(response => response.json())
       .then(data => {
-        if (data == 'Not Authorized') {
+        if (data == "Not Authorized") {
           UI.showAlert('Incorrect login or password', 'danger')
         } else if (data == username) {
           localStorage.setItem('username', username)

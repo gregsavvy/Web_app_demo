@@ -43,7 +43,6 @@ user.query(`CREATE TABLE users (
   .catch(e => console.error(e.stack))
 
 // default user
-
 // [{"username":"admin",
 //     "email":"admin@admin.com",
 //     "password":"admin",
@@ -51,8 +50,20 @@ user.query(`CREATE TABLE users (
 //     "session":""
 // }]
 
-user.query('INSERT INTO users(username, email, password, date, session) VALUES(admin, admin@admin.com, admin, 2021-01-01, NULL)')
-  .catch(e => console.error(e.stack))
+sqlText = 'INSERT INTO users(username, email, password, date, session) VALUES ($1, $2, $3, $4, $5) RETURNING *'
+sqlValues = ['admin', 'admin@admin.com', 'admin', '2021-01-01', 'NULL']
+
+user.query('SELECT * from users')
+    .then(result => {
+      if (result.rows[0] === undefined) {
+        user.query(sqlText, sqlValues)
+          .catch(e => console.error(e.stack))
+      }
+      
+    })
+    .catch(e => console.error(e.stack))
+
+
 
 exports.user = user
 exports.pool = pool

@@ -89,7 +89,7 @@ const server = http.createServer((req, res) => {
       getIMG(req, res, img)
     }
 
-    // USERS API, JSON file //
+    // USERS API, PostgreSQL //
     // Get all users
     else if(req.url == '/api/users' && req.method === 'GET') {
       res.writeHead(200, {'Access-Control-Allow-Origin': `${domain}`,

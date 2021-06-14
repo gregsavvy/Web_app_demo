@@ -40,21 +40,27 @@ goodsSchema.index({param1: 'text'}, {param3: Boolean})
 const Goods = mongoose.model('Goods', goodsSchema)
 
 // Initial goods to fill MongoDB for testing purposes
-const initialGood1 = new Goods({
-  param1: 'Test name 1',
-  param2: 'Test description of a product 1',
-  param3: true,
-  filename: [ipad_1614019907969_, macbook1_1614020016674_, macbook2_1614020016680_],
-  date: Date.now()
-}).save()
-
-const initialGood2 = new Goods({
-  param1: 'Test name 2',
-  param2: 'Test description of a product 2',
-  param3: false,
-  filename: [macbook3_1614020016684_, surface1_1614019847525_],
-  date: Date.now()
-}).save()
+Goods.find()
+    .then(goods => {
+      if (goods.length <= 2) {
+        const initialGood1 = new Goods({
+          param1: 'Test name 1',
+          param2: 'Test description of a product 1',
+          param3: true,
+          filename: ['ipad_1614019907969_.jpg', 'macbook1_1614020016674_.jpg', 'macbook2_1614020016680_.jpg'],
+          date: Date.now()
+        }).save()
+        
+        const initialGood2 = new Goods({
+          param1: 'Test name 2',
+          param2: 'Test description of a product 2',
+          param3: false,
+          filename: ['macbook3_1614020016684_.jpg', 'surface1_1614019847525_.jpg'],
+          date: Date.now()
+        }).save()
+      }
+    })
+    .catch(err => console.log(err))
 // ---
 
 module.exports = Goods

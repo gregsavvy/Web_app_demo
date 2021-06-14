@@ -51,7 +51,7 @@ async function createProduct(req,res) {
     let filename_list = []
        busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
          const filename_server = `${filename.substr(0, filename.lastIndexOf("."))}_${Date.now()}_${path.extname(filename)}`
-         var saveTo = path.resolve('./backend/src/img/', filename_server)
+         var saveTo = path.resolve('./src/img/', filename_server)
          file.pipe(fs.createWriteStream(saveTo))
          filename_list.push(filename_server)
        })
@@ -60,7 +60,7 @@ async function createProduct(req,res) {
        })
        busboy.on('finish', function() {
          body['filename'] = filename_list
-         const { param1, param2, param3, filename, date } = JSON.parse(JSON.stringify(body))
+         let { param1, param2, param3, filename, date } = JSON.parse(JSON.stringify(body))
          const newGoods = new Goods({
            param1,
            param2,
@@ -84,7 +84,7 @@ async function updateProduct(req, res, id) {
   let filename_list = []
       busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
         const filename_server = `${filename.substr(0, filename.lastIndexOf("."))}_${Date.now()}_${path.extname(filename)}`
-        var saveTo = path.resolve('./backend/src/img/', filename_server)
+        var saveTo = path.resolve('./src/img/', filename_server)
         file.pipe(fs.createWriteStream(saveTo))
         filename_list.push(filename_server)
       })
@@ -95,7 +95,7 @@ async function updateProduct(req, res, id) {
        if (filename_list.length>0) {
        body['filename'] = filename_list
      }
-       const { param1, param2, param3, filename, date } = JSON.parse(JSON.stringify(body))
+      let { param1, param2, param3, filename, date } = JSON.parse(JSON.stringify(body))
 
        Goods.findById(id)
          .then(goods => {

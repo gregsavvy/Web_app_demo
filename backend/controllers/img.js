@@ -2,7 +2,7 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 
-var dir = path.resolve('./backend/src/img/')
+var dir = path.resolve('./src/img/')
 
 // 1 Gets image
 async function getIMG(req,res,img) {
