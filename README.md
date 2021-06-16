@@ -5,12 +5,12 @@ This is a Web app demo which consists of 5 separate modules:
 1. NODE.js (without Express) | Independent RestAPI backend (JSON provider, file and img host) | ex. localhost:5000/api/products or localhost:5000/api/products_img/{:img}
 2. Vanilla JS | Admin frontend used for product management | ex. localhost:8081
 3. VUE.js | Client frontend with shopping cart | ex. localhost:8080
-4. MongoDB | JSON database used to store product info | ex. localhost:7070
-5. PostgreSQL | SQL database used to store user info | ex. localhost:6060
+4. MongoDB | JSON database used to store product info | ex. localhost:7070 (Mongo Express)
+5. PostgreSQL | SQL database used to store user info | ex. localhost:6060 (Adminer)
 
 ---
 
-Login and password for admin frontend: admin | admin.
+Default login and password for admin frontend: admin | admin.
 
 ---
 
@@ -19,7 +19,6 @@ Installation (Linux):
 1. Install Docker from https://docs.docker.com/engine/install/ubuntu/ & Docker Compose from https://docs.docker.com/compose/install/
 2. Install git $sudo apt-get install git-all
 3. Pull git repo into any directory, - $git remote add demo https://github.com/gregsavvy/Test-Web-App.git), then $git pull demo
-4. Install dependencies, - $npm install
 
 ---
 
@@ -27,8 +26,6 @@ Run (Linux):
 1. From the main directory, - $sudo docker-compose up
 
 This command will start all 5 modules in separate containers.
-
-For separate commands, please see package.json files.
 
 ---
 
@@ -59,7 +56,7 @@ Frontend dependencies:
 ---
 
 Scope creep consideration for the demo:
-1. No cryptographic hash functions implementation on session cookies and user passwords (ex. bcrypt).
+1. No cryptographic hash functions implementation on session cookies and user passwords (ex. bcrypt). DO NOT STORE SUCH INFO WITHOUT CRYPTOGRAPHIC ENCRYPTION IN DATABASES.
 2. No https implementation (consequently no 'Secure' parameter on cookie headers).
 3. No API test framework implementation (ex. Mocha).
 4. No checkout and payment functionality on frontend, consequently no inventory management functionality as well.

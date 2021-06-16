@@ -50,7 +50,7 @@ async function getUser(req,res, username) {
 
       let accessToggle = "Not Authorized"
       let accessPromise = new Promise((resolve,reject) => {
-        // to be tested in terms of slice
+
         if (dbUser.username == username && dbUser.session == sessionCookie.match('(^|;)\\s*' + 'sessionId' + '\\s*=\\s*([^;]+)')?.pop()) {
 
 

@@ -42,7 +42,7 @@ const Goods = mongoose.model('Goods', goodsSchema)
 // Initial goods to fill MongoDB for testing purposes
 Goods.find()
     .then(goods => {
-      if (goods.length <= 2) {
+      if (goods.length < 2) {
         const initialGood1 = new Goods({
           param1: 'Test name 1',
           param2: 'Test description of a product 1',
