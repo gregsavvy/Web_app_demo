@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: admin-deployment
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            component: admin
+    template:
+        metadata:
+            labels:
+                component: admin
+        spec:
+            containers:
+                -   name: admin
+                    image: gregsavvy/web_app_admin
+                    ports:
+                        - containerPort: 8081
+                    env:
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: admin-cluster-ip-service
+spec:
+    type: ClusterIP
+    selector:
+        component: admin
+    ports:
+     -   port: 8081
+         targetPort: 8081

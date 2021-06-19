@@ -14,12 +14,10 @@ spec:
         spec:
             containers:
                 -   name: client
-                    image: gregsavvy/react-native_chat
+                    image: gregsavvy/web_app_front
                     ports:
                         - containerPort: 8080
                     env:
-                        -   name: BACKEND_HOST
-                            value: backend-cluster-ip-service
 ---
 apiVersion: v1
 kind: Service

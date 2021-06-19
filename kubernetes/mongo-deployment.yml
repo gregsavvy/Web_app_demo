@@ -29,6 +29,27 @@ spec:
             memory: 100Mi
         ports:
         - containerPort: 27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: admin
+          MONGO_INITDB_ROOT_PASSWORD: admin
+        volumeMounts:
+       - name: pvc-300mb
+             mountPath: /data/db
+      volumes:
+       - name: pvc-300mb
+         persistentVolumeClaim:
+              claimName: pvc-300mb
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: pvc-300mb
+spec:
+ accessModes:
+  - ReadWriteOnce
+ resources:
+  requests:
+   storage: 300M
 ---
 apiVersion: v1
 kind: Service
@@ -39,7 +60,7 @@ metadata:
     app.kubernetes.io/component: backend
 spec:
   ports:
-  - port: 27017
+  - port: 7000
     targetPort: 27017
   selector:
     app.kubernetes.io/name: mongo

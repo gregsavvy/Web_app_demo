@@ -24,8 +24,9 @@ Installation (Linux):
 
 Run (Linux):
 1. From the main directory, - $sudo docker-compose up
+2. One thing to note, because of an unresolved issue in nodejs-pg library (https://github.com/brianc/node-postgres/issues/1611). You may have to Ctrl+C all containers and then again, - $sudo docker-compose up, - in order for Postgres to setup everything properly [**].
 
-This command will start all 5 modules in separate containers.
+This will start all 5 modules in separate containers.
 
 ---
 
@@ -64,3 +65,5 @@ Scope creep consideration for the demo:
 
 PS:
 Do not run this app on production systems without taking into consideration the aforementioned scope creep of the demo.
+
+[**] The issue here seems to persist even after applying all the possible fixes from github users. Seems to be a problem with the pool object and how it handles connections.

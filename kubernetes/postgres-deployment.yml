@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  template:
+    metadata:
+      labels:
+        app: postgres
+        tier: backend
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:9.6.2
+          ports:
+            - containerPort: 5432
+          env:
+            POSTGRES_DB: default
+            POSTGRES_PASSWORD: admin
+            POSTGRES_USER: admin
+          volumeMounts:
+          - name: pvc-300mb
+              mountPath: /data/db
+        volumes:
+          - name: pvc-300mb
+          persistentVolumeClaim:
+                claimName: pvc-300mb
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: pvc-300mb
+spec:
+ accessModes:
+  - ReadWriteOnce
+ resources:
+  requests:
+   storage: 300M
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  ports:
+    - name: db
+      protocol: TCP
+      port: 6000
+      targetPort: 5432
+  selector:
+    app: postgres
+    tier: backend

@@ -47,7 +47,7 @@ Goods.find()
           param1: 'Test name 1',
           param2: 'Test description of a product 1',
           param3: true,
-          filename: ['ipad_1614019907969_.jpg', 'macbook1_1614020016674_.jpg', 'macbook2_1614020016680_.jpg'],
+          filename: ['ipad_1614019907969_.jpg', 'macbook1_1614020016674_.jpg', 'macbook2_1614020016680_.jpg', 'station_1614019965477_.jpg', 'macbook3_1614020016684_.jpg'],
           date: Date.now()
         }).save()
         
@@ -55,7 +55,7 @@ Goods.find()
           param1: 'Test name 2',
           param2: 'Test description of a product 2',
           param3: false,
-          filename: ['macbook3_1614020016684_.jpg', 'surface1_1614019847525_.jpg'],
+          filename: ['surface1_1614019847525_.jpg'],
           date: Date.now()
         }).save()
       }
