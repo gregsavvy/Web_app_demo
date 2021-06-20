@@ -14,7 +14,7 @@ spec:
         spec:
             containers:
                 -   name: client
-                    image: gregsavvy/web_app_front
+                    image: 89253556478/web_app_demo:vuefront
                     ports:
                         - containerPort: 8080
                     env:

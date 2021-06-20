@@ -6,16 +6,13 @@ const pool = new Pool({
   database: 'default',
   password: 'admin',
   port: 6000,
-  pool: { 
-    min: 0,
-    max: 10,
-    createTimeoutMillis: 8000,
-    acquireTimeoutMillis: 8000,
-    idleTimeoutMillis: 8000,
-    reapIntervalMillis: 1000,
-    createRetryIntervalMillis: 100,
-    propagateCreateError: false
-  },
+  min: 0,
+  max: 50,
+  createTimeoutMillis: 0,
+  acquireTimeoutMillis: 0,
+  idleTimeoutMillis: 0,
+  reapIntervalMillis: 0,
+  createRetryIntervalMillis: 100,
 })
 
 const user = new Client({
@@ -28,47 +25,47 @@ const user = new Client({
 
 async function dbConnect(pool, user) {
   await pool.connect()
-  .then(() => {
-    console.log('Connected to Postgres db pool')
+    .then(() => {
+      console.log('Connected to Postgres db pool')
 
-    pool.query('SELECT NOW() as now')
-      .then(() => {
+      pool.query('SELECT NOW() as now')
+        .then(() => {
 
-        user.connect()
-          .then(() => {
-            console.log('Connected to Postgres db client')
+          user.connect()
+            .then(() => {
+              console.log('Connected to Postgres db client')
 
-            user.query(`CREATE TABLE users (
-              username varchar,
-              email varchar,
-              password varchar,
-              date varchar,
-              session varchar
-              );`
-              )
-              .then(() => {
-                // initial admin user for testing purposes
-                sqlText = 'INSERT INTO users(username, email, password, date, session) VALUES ($1, $2, $3, $4, $5) RETURNING *'
-                sqlValues = ['admin', 'admin@admin.com', 'admin', '2021-01-01', 'NULL']
+              user.query(`CREATE TABLE users (
+                username varchar,
+                email varchar,
+                password varchar,
+                date varchar,
+                session varchar
+                );`
+                )
+                .then(() => {
+                  // initial admin user for testing purposes
+                  sqlText = 'INSERT INTO users(username, email, password, date, session) VALUES ($1, $2, $3, $4, $5) RETURNING *'
+                  sqlValues = ['admin', 'admin@admin.com', 'admin', '2021-01-01', 'NULL']
 
-                user.query('SELECT * from users')
-                    .then(result => {
-                      if (result.rows[0] === undefined) {
-                        user.query(sqlText, sqlValues)
-                          .catch(e => console.error(e.stack))
-                      }
-                  })
-                    .catch(e => console.error(e.stack))
+                  user.query('SELECT * from users')
+                      .then(result => {
+                        if (result.rows[0] === undefined) {
+                          user.query(sqlText, sqlValues)
+                            .catch(e => console.error(e.stack))
+                        }
+                    })
+                      .catch(e => console.error(e.stack))
+                })
+                .catch(e => console.error(e.stack))
               })
-              .catch(e => console.error(e.stack))
-            })
-        .catch(e => {
-          console.error(e.stack)
+          .catch(e => {
+            console.error(e.stack)
+          })
+          
         })
-        
-      })
-      .catch(e => console.error(e.stack))
-  })
+        .catch(e => console.error(e.stack))
+    })
   .catch(e => {
     console.error(e.stack)
   })

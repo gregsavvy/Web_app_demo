@@ -10,51 +10,7 @@
 
     <div class="container-main">
       <h2>About this web app demo.</h2>
-      <p>
-      This is a Web app demo which consists of 3 separate modules:
-      <br>
-      1. NODE.js (without Express) | Independent RestAPI backend (JSON provider, file and img host) | ex. localhost:5000/api/products or localhost:5000/api/products_img/{:img}
-      <br>
-      2. Vanilla JS | Admin frontend used for product management | ex. localhost:8081
-      <br>
-      3. VUE.js | Client frontend with shopping cart | ex. localhost:8080
-      <br>
-      <br>
-      Scope creep consideration for the demo:
-      <br>
-      1. No cryptographic hash functions implementation on session cookies and user passwords (ex. bcrypt).
-      <br>
-      2. No https implementation (consequently no 'Secure' parameter on cookie headers).
-      <br>
-      3. No API test framework implementation (ex. Mocha).
-      <br>
-      4. No proper storage for users, currently they are stored in './backend/models/users.json' for ease of running this demo (ex. local mySQL implementation would require Docker implementation as well).
-      <br>
-      5. No checkout and payment functionality on frontend, consequently no inventory management functionality as well.
-      <br>
-      6. No infinite scrolling functionality.
-      <br>
-      <br>
-
-      Installation:
-      <br>
-      1. Install Node.js (<a href="https://nodejs.org/en/">https://nodejs.org/en/</a>).
-      <br>
-      2. Pull git repo into any directory, - $git remote add demo https://github.com/gregsavvy/Test-Web-App.git), then $git pull demo
-      <br>
-      3. Install dependencies, - $npm install
-      <br>
-      <br>
-
-      Run:
-      <br>
-      1. From the main directory, - $npm start
-      <br>
-      <br>
-
-      PS:
-      <br>
-      Do not run this app on production systems without taking into consideration the aforementioned scope creep of the demo.</p>
+      <p>Please, read at <a href="https://github.com/gregsavvy/Web_app_demo">Github</a></p>
     </div>
   </div>
 </template>

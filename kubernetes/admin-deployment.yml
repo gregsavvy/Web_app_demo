@@ -14,7 +14,7 @@ spec:
         spec:
             containers:
                 -   name: admin
-                    image: gregsavvy/web_app_admin
+                    image: 89253556478/web_app_demo:admin
                     ports:
                         - containerPort: 8081
                     env:
