@@ -24,9 +24,10 @@ kind: Service
 metadata:
     name: admin-cluster-ip-service
 spec:
-    type: ClusterIP
+    type: NodePort
     selector:
         component: admin
     ports:
-     -   port: 8081
-         targetPort: 8081
+     -  port: 8081
+        targetPort: 8081
+        nodePort: 30001

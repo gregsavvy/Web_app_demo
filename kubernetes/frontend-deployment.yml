@@ -24,9 +24,10 @@ kind: Service
 metadata:
     name: client-cluster-ip-service
 spec:
-    type: ClusterIP
+    type: NodePort
     selector:
         component: client
     ports:
-     -   port: 8080
-         targetPort: 8080
+     -  port: 8080
+        targetPort: 8080
+        nodePort: 30002
