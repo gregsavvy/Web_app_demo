@@ -38,6 +38,8 @@ kind: Service
 metadata:
   name: postgres-service
 spec:
+  type: ExternalName
+  externalName: localhost
   selector:
     app: postgres
   ports:

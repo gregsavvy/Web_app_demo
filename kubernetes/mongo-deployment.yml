@@ -36,9 +36,10 @@ kind: Service
 metadata:
   name: mongodb-service
 spec:
+  type: ExternalName
+  externalName: localhost
   selector:
     app: mongo
   ports:
-    - protocol: TCP
-      port: 7000
+    - port: 7000
       targetPort: 27017
