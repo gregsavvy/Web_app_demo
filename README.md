@@ -31,7 +31,7 @@ This will start all 5 modules in separate containers.
 ---
 
 Kubernetes implementation:
-testing...
+The code is not currently configured to run in a kubernetes cluster (need to change localhost to clusterIP names programmatically), but the YAML files are working, deployments / services are running in a cluster.
 
 ---
 
