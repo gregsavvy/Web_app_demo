@@ -1,78 +1,44 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: mongo
+  name: mongodb-deployment
+  labels:
+    app: mongo
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      role: mongo
-      environment: test
-  serviceName: "mongo"
-  replicas: 3
+      app: mongo
   template:
     metadata:
       labels:
-        role: mongo
-        environment: test
+        app: mongo
     spec:
-      terminationGracePeriodSeconds: 10
       containers:
       - name: mongo
         image: mongo
-        command:
-          - mongod
-          - "--replSet"
-          - rs0
-          - "--smallfiles"
-          - "--noprealloc"
         ports:
-          - containerPort: 27017
-        volumeMounts:
-          - name: mongo-persistent-storage
-            mountPath: /data/db
-      - name: mongo-sidecar
-        image: cvallance/mongo-k8s-sidecar
+        - containerPort: 27017
         env:
-          - name: MONGO_SIDECAR_POD_LABELS
-            value: "role=mongo,environment=test"
-          - name: MONGO_INITDB_ROOT_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: mongo-credentials
-                key: username
-          - name: MONGO_INITDB_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: mongo-credentials
-                key: password         
-  volumeClaimTemplates:
-    - metadata:
-        name: mongo-persistent-storage
-      spec:
-        storageClassName: "fast"
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 500Mi
----
-kind: StorageClass
-apiVersion: storage.k8s.io/v1beta1
-metadata:
- name: fast
-provisioner: kubernetes.io/gce-pd
-parameters:
- type: pd-ssd
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-credentials
+              key: username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: mongo-credentials
+              key: password
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo
-  labels:
-    service: mongo
+  name: mongodb-service
 spec:
   selector:
-    service: mongo
-  type: ClusterIP
+    app: mongo
   ports:
-  - port: 27017
-    targetPort: 27017
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017

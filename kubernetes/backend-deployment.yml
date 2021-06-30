@@ -2,8 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: backend-deployment
+    labels:
+        component: backend
 spec:
-    replicas: 2
+    replicas: 1
     selector:
         matchLabels:
             component: backend
@@ -16,7 +18,7 @@ spec:
                 -   name: backend
                     image: 89253556478/web_app_demo:backend
                     ports:
-                        -   containerPort: 5000
+                        - containerPort: 5000
                     env:
 ---
 apiVersion: v1
@@ -24,10 +26,9 @@ kind: Service
 metadata:
     name: backend-cluster-ip-service
 spec:
-    type: NodePort
+    type: ClusterIP
     selector:
         component: backend
     ports:
      -  port: 5000
         targetPort: 5000
-        nodePort: 30000
