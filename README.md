@@ -18,7 +18,8 @@ Installation (Linux):
 
 1. Install Docker from https://docs.docker.com/engine/install/ubuntu/ & Docker Compose from https://docs.docker.com/compose/install/
 2. Install git $sudo apt-get install git-all
-3. Pull git repo into any directory, - $git remote add demo https://github.com/gregsavvy/Test-Web-App.git), then $git pull demo
+3. Initialize git repo in any directory, - $git init
+4. Pull git repo into git directory, - $git remote add demo https://github.com/gregsavvy/Test-Web-App.git), then $git pull demo main
 
 ---
 
